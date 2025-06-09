@@ -3,6 +3,7 @@
 
 #include <string>
 #include "abstractMedia.h"
+#include "../visitor/visitor.h"
 
 class Music : public AbstractMedia {
 private:
@@ -28,6 +29,9 @@ public:
     //Sets
     void setAlbum(const std::string &);
     void setLyrics(const std::string &);
+
+    virtual void accept(Visitor *) const override;
+
 };
 
 #endif //MUSIC_H

@@ -27,3 +27,8 @@ void Music::setAlbum(const std::string &a){
 void Music::setLyrics(const std::string &l){
     this->lyrics = l;
 }
+
+void Music::accept(Visitor *visit) const{
+    visit->visitMusic(this);
+}
+

@@ -27,3 +27,7 @@ void Audiobook::setReader(const std::string &r){
 void Audiobook::setSummary(const std::string &s){
     this->summary = s;
 }
+
+void Audiobook::accept(Visitor *visit) const{
+    visit->visitAudiobook(this);
+}

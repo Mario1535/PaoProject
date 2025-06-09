@@ -3,6 +3,7 @@
 
 #include <string>
 #include "abstractMedia.h"
+#include "../visitor/visitor.h"
 
 class Podcast : public AbstractMedia {
 private:
@@ -28,6 +29,9 @@ public:
     //Sets
     void setEpisode(const std::string &);
     void setSeason(const std::string &);
+
+    virtual void accept(Visitor *) const override;
+
 };
 
 #endif //PODCAST_H

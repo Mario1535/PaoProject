@@ -113,27 +113,19 @@ void MainWindow::onLoadActionTriggered() {
 }
 
 void MainWindow::onNewActionTriggered() {
-    newMediaTypeDialog *dialog = new newMediaTypeDialog(this);
+    newMediaTypeDialog *dialog = new newMediaTypeDialog(this); //finestra di dialogo tipo
+    mediaEditor editor(this); //creazione del media editor
 
-    // Connessione del segnale
-    connect(dialog, &newMediaTypeDialog::mediaTypeChosen, this, [this](AbstractMedia::mediaType type) {
-        // Creazione dell'editor con il tipo selezionato
-        mediaEditor editor(type, this);
+    // Connessione del segnale di salvataggio al container
+    connect(&editor, &mediaEditor::newMediaCreated,
+            &container, &Container::add);
 
-        // Connessione del segnale di salvataggio al container
-        connect(&editor, &mediaEditor::newMediaCreated,
-                &container, &Container::add);  // Usa il nome esatto 'add' come nella tua classe
+    // Mostra l'editor e ricarica i media se necessario
+    if (editor.exec() == QDialog::Accepted) {
+        loadMedia();
+    }
 
-        // Mostra l'editor e ricarica i media se necessario
-        if (editor.exec() == QDialog::Accepted) {
-            loadMedia();
-        }
-    });
-
-    dialog->show();  // Usa show() per finestra non modale
-    // Oppure, se hai convertito newMediaTypeDialog in QDialog:
-    // dialog->exec();  // Per finestra modale
-    // dialog->deleteLater(); // Se allocato sull'heap
+    dialog->show();
 }
 
 void MainWindow::onEditActionTriggered() {
@@ -183,8 +175,6 @@ void MainWindow::onSearchTextChanged(const QString &text) {
     }
 }
 
-
-
 //show media detail and clear grid layout
 void MainWindow::onMediaClicked(AbstractMedia *media) {
     mediaDetailWidget *detailWidget = new mediaDetailWidget(this);
@@ -199,11 +189,6 @@ void MainWindow::clearGridLayout() {
         delete item;
     }
 }
-
-
-
-
-
 
 
 //gestione chiusura mediaeditor
@@ -269,6 +254,7 @@ void MainWindow::saveChanges() {
 
 
 //DA IMPLEMENTARE
-
+/*
 void MainWindow::loadMediaFromFile(const QString &filePath) {}
 AbstractMedia* MainWindow::getSelectedMedia() const { return nullptr; }
+*/

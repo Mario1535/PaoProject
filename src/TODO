@@ -1,10 +1,13 @@
 //////////TODO
 
-edit in versione new funziona, bisogna aggiustare pero il sistema di memorizzazione dei media,
-il quale dovrebbe funzionare ma crash alla pressione del pulsante sav, probabilmente il problema e' nel converter.
+>collegare con successo newmediatypedialog con mediaeditor
 
-verificare se funziona il load media
+>finire pattern visitor
 
-finire di aggiustare la funzione editMedia, con la funzione modifica media.
+>fare mediamanager
 
-aggiustare la searchbar
+>aggiustare il salvataggio dei media in container
+
+>aggiustare griglia mainwindow
+
+>fare editmedia

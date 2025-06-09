@@ -1,7 +1,8 @@
-#ifndef MEDIA_H
-#define MEDIA_H
+#ifndef ABSTRACTMEDIA_H
+#define ABSTRACTMEDIA_H
 
 #include <string>
+#include "../visitor/visitor.h"
 
 class AbstractMedia {
 private:
@@ -36,7 +37,7 @@ public:
     void setYear(const unsigned int &);
     void setDuration(const double &);
 
-
+    virtual void accept(Visitor *) const = 0;
 
 };
 

@@ -136,7 +136,7 @@ void mediaEditor::onSaveButtonClicked() {
 
 
     if (ui->stackedWidget->currentIndex() == 0){// audiolibro
-        std::string imagePath = Converter::convertPixmapToPath(picture, AbstractMedia::Audiobook);
+        std::string imagePath = Converter::convertPixmapToPath(picture);
         media = new Audiobook(
             title.toStdString(),
             author.toStdString(),
@@ -153,7 +153,7 @@ void mediaEditor::onSaveButtonClicked() {
     }
 
     if (ui->stackedWidget->currentIndex()== 1){// musica
-        std::string imagePath = Converter::convertPixmapToPath(picture, AbstractMedia::Music);
+        std::string imagePath = Converter::convertPixmapToPath(picture);
         media = new Music(
             title.toStdString(),
             author.toStdString(),
@@ -170,7 +170,7 @@ void mediaEditor::onSaveButtonClicked() {
     }
 
     if (ui->stackedWidget->currentIndex() == 2){// podcast
-        std::string imagePath = Converter::convertPixmapToPath(picture, AbstractMedia::Podcast);
+        std::string imagePath = Converter::convertPixmapToPath(picture);
         media = new Podcast(
             title.toStdString(),
             author.toStdString(),

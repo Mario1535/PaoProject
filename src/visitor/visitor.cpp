@@ -1,3 +1,5 @@
 #include "visitor.h"
 
-visitor::visitor() {}
+Visitor::Visitor() {}
+
+Visitor::~Visitor() {}

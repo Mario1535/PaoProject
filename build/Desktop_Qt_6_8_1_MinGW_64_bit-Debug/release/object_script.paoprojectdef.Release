@@ -1,3 +1,5 @@
+release/concretevisitor.o
+release/visitor.o
 release/abstractmedia.o
 release/audiobook.o
 release/container.o

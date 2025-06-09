@@ -27,3 +27,8 @@ void Podcast::setEpisode(const std::string &e){
 void Podcast::setSeason(const std::string &s){
     this->season = s;
 }
+
+void Podcast::accept(Visitor *visit) const{
+    visit->visitPodcast(this);
+}
+

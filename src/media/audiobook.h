@@ -3,6 +3,7 @@
 
 #include <string>
 #include "abstractMedia.h"
+#include "../visitor/visitor.h"
 
 class Audiobook : public AbstractMedia {
 private:
@@ -28,6 +29,9 @@ public:
     //Sets
     void setReader(const std::string &);
     void setSummary(const std::string &);
+
+    virtual void accept(Visitor *) const override;
+
 };
 
 #endif //AUDIOBOOK_H

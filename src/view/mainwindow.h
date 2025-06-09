@@ -21,6 +21,7 @@
 #include "mediadetailwidget.h"  // Finestra dei dettagli del media
 
 #include "..\container\container.h"
+#include "..\visitor\visitor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

@@ -9,6 +9,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/manager/mediamanager.cpp \
+    src/visitor/concretevisitor.cpp \
     src/visitor/visitor.cpp \
     src\media\abstractmedia.cpp \
     src\media\audiobook.cpp \
@@ -25,6 +27,8 @@ SOURCES += \
     src\view\textoverlaywidget.cpp
 
 HEADERS += \
+    src/manager/mediamanager.h \
+    src/visitor/concretevisitor.h \
     src/visitor/visitor.h \
     src\media\abstractmedia.h \
     src\media\audiobook.h \
