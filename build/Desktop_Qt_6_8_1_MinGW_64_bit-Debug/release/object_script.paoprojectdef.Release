@@ -1,3 +1,4 @@
+release/mediamanager.o
 release/concretevisitor.o
 release/visitor.o
 release/abstractmedia.o

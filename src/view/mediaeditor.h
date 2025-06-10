@@ -19,7 +19,7 @@ public:
     explicit mediaEditor(QWidget *parent = nullptr);
     ~mediaEditor();
 
-    void loadMedia(AbstractMedia *media);  // Carica i dati di un media esistente
+    void loadMedia(Visitor*);  // Carica i dati di un media esistente
     AbstractMedia* getMedia();  // Restituisce il media modificato/creato
 
 private slots:

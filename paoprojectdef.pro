@@ -24,7 +24,6 @@ SOURCES += \
     src\media\music.cpp \
     src\view\newmediatypedialog.cpp \
     src\media\podcast.cpp \
-    src\view\textoverlaywidget.cpp
 
 HEADERS += \
     src/manager/mediamanager.h \
@@ -41,7 +40,6 @@ HEADERS += \
     src\media\music.h \
     src\view\newmediatypedialog.h \
     src\media\podcast.h \
-    src\view\textoverlaywidget.h
 
 FORMS += \
     src\view\mainwindow.ui \
@@ -49,7 +47,6 @@ FORMS += \
     src\view\mediaeditor.ui \
     src\view\mediawidget.ui \
     src\view\newmediatypedialog.ui \
-    src\view\textoverlaywidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -2,8 +2,6 @@
 #define NEWMEDIATYPEDIALOG_H
 
 #include <QWidget>
-#include "mediaeditor.h"
-#include "..\media\abstractMedia.h"
 
 namespace Ui {
 class newMediaTypeDialog;
@@ -17,7 +15,7 @@ public:
     explicit newMediaTypeDialog(QWidget *parent = nullptr);
     ~newMediaTypeDialog();
 
-private slots:
+public slots:
     void onAudiobookButtonClicked();
     void onMusicButtonClicked();
     void onPodcastButtonClicked();

@@ -11,9 +11,9 @@ public:
     Visitor();
     virtual ~Visitor();
 
-    virtual void visitAudiobook(const Audiobook*) const = 0;
-    virtual void visitMusic(const Music*) const = 0;
-    virtual void visitPodcast(const Podcast*) const = 0;
+    virtual void visit(const Audiobook*) = 0;
+    virtual void visit(const Music*) = 0;
+    virtual void visit(const Podcast*) = 0;
 };
 
 #endif // VISITOR_H

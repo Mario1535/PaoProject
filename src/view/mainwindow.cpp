@@ -8,6 +8,8 @@
 #include "mediaeditor.h"      // Finestra di modifica/creazione media
 #include "mediadetailwidget.h"
 #include "..\container\container.h"
+#include "..\manager\mediamanager.h"
+#include "..\visitor\concretevisitor.h"
 
 class mediaEditor;
 class mediaWidget;
@@ -42,12 +44,15 @@ MainWindow::MainWindow(QWidget *parent)
     centralWidget->setLayout(mainLayout);
     setCentralWidget(centralWidget);
 
+    container = new Container();
+
     setupUI();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete container;
 }
 
 void MainWindow::setupUI()
@@ -92,53 +97,53 @@ void MainWindow::setupUI()
     mainLayout->setContentsMargins(15, 15, 15, 15);
 }
 
-//Popolo la main window con i mediawidget tramite funzione load
-void MainWindow::loadMedia() {
-    clearGridLayout();  // Svuota la griglia prima di ricaricare i media
-
-    for (AbstractMedia *media : mediaList) {
-        mediaWidget *mediawidget = new mediaWidget(media, this);
-        connect(mediawidget, &mediaWidget::clicked, this, &MainWindow::onMediaClicked);
-        ui->gridLayout->addWidget(mediawidget);
-    }
-}
-
-//Mainwindow Menubar
-void MainWindow::onLoadActionTriggered() {
-    QString filePath = QFileDialog::getOpenFileName(this, "Carica media", "", "File di media (*.json)");
-    if (!filePath.isEmpty()) {
-        // Carica i media dal file
-        loadMediaFromFile(filePath);
-    }
-}
+//new edit remove load actions
 
 void MainWindow::onNewActionTriggered() {
-    newMediaTypeDialog *dialog = new newMediaTypeDialog(this); //finestra di dialogo tipo
-    mediaEditor editor(this); //creazione del media editor
-
-    // Connessione del segnale di salvataggio al container
-    connect(&editor, &mediaEditor::newMediaCreated,
-            &container, &Container::add);
-
-    // Mostra l'editor e ricarica i media se necessario
-    if (editor.exec() == QDialog::Accepted) {
-        loadMedia();
+    mediaEditor *editor = new mediaEditor(this);
+    newMediaTypeDialog *dialog = new newMediaTypeDialog(this);
+    dialog->setFocus(); //faccio scegliere il tipo
+    if (dialog->close() == QDialog::Accepted) { //se il tipo e' stato scelto faccio vedere l'editor
+        editor->setFocus();
     }
 
-    dialog->show();
+    // Connessione del segnale di salvataggio al container
+    AbstractMedia* media;
+    connect(editor, &mediaEditor::newMediaCreated, [&media](AbstractMedia* m) {
+        media = m;
+    });
+
+    mediaManager *manager = new mediaManager();
+    if(manager->mediaCreated(media)){
+
+    }
+    else {
+
+    }
+
+    delete editor;
+    delete dialog;
+    delete manager;
 }
 
 void MainWindow::onEditActionTriggered() {
-    // Trova il media selezionato (ad esempio, tramite un indice o un puntatore)
-    AbstractMedia *selectedMedia = getSelectedMedia();
-    if (selectedMedia) {
-        AbstractMedia::mediaType type = selectedMedia->getMediaType();
-        mediaEditor editor(type, this);
-        editor.loadMedia(selectedMedia);
-        if (editor.exec() == QDialog::Accepted) {
-            loadMedia();  // Ricarica i media
-        }
+    mediaEditor *editor = new mediaEditor();
+    ConcreteVisitor *visitor = new ConcreteVisitor();
+    mediaManager *manager = new mediaManager();
+
+    if (manager->mediaEdited(container, title, visitor)) {
+        connect(editMediaEdit, &EditMedia::onApply, this, &MainWindow::onMediaEdited);
+
+        editor->loadMedia(visitor);
+        editor->setFocus();
+
+        refreshList();
+    } else {
+        showError("Media not found");
     }
+
+    delete editor;
+    delete visitor;
 }
 
 void MainWindow::onRemoveActionTriggered() {
@@ -151,12 +156,33 @@ void MainWindow::onRemoveActionTriggered() {
     }
 }
 
+void MainWindow::onLoadActionTriggered() {
+    QString filePath = QFileDialog::getOpenFileName(this, "Carica media", "", "File di media (*.json)");
+    if (!filePath.isEmpty()) {
+        // Carica i media dal file
+        //loadMediaFromFile(filePath);
+    }
+}
+
 void MainWindow::onHelpActionTriggered() {
     QMessageBox::information(this, "Aiuto", "Scorciatoie:\n"
                                             "Ctrl+N: Nuovo media\n"
                                             "Ctrl+E: Modifica media\n"
                                             "Ctrl+D: Rimuovi media\n"
                                             "Ctrl+S: Salva modifiche");
+}
+
+
+
+//Popolo la main window con i mediawidget tramite funzione load
+void MainWindow::loadMedia() {
+    clearGridLayout();  // Svuota la griglia prima di ricaricare i media
+
+    for (AbstractMedia *media : mediaList) {
+        mediaWidget *mediawidget = new mediaWidget(media, this);
+        connect(mediawidget, &mediaWidget::clicked, this, &MainWindow::onMediaClicked);
+        ui->gridLayout->addWidget(mediawidget);
+    }
 }
 
 

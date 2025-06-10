@@ -29,5 +29,5 @@ void Audiobook::setSummary(const std::string &s){
 }
 
 void Audiobook::accept(Visitor *visit) const{
-    visit->visitAudiobook(this);
+    visit->visit(this);
 }

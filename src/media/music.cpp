@@ -29,6 +29,6 @@ void Music::setLyrics(const std::string &l){
 }
 
 void Music::accept(Visitor *visit) const{
-    visit->visitMusic(this);
+    visit->visit(this);
 }
 

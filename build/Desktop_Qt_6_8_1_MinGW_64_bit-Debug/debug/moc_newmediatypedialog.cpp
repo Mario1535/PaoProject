@@ -40,8 +40,6 @@ static constexpr auto qt_meta_stringdata_ZN18newMediaTypeDialogE = QtMocHelpers:
     "newMediaTypeDialog",
     "mediaTypeChosen",
     "",
-    "AbstractMedia::mediaType",
-    "type",
     "onAudiobookButtonClicked",
     "onMusicButtonClicked",
     "onPodcastButtonClicked",
@@ -68,13 +66,13 @@ Q_CONSTINIT static const uint qt_meta_data_ZN18newMediaTypeDialogE[] = {
        1,    1,   44,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       5,    0,   47,    2, 0x08,    3 /* Private */,
-       6,    0,   48,    2, 0x08,    4 /* Private */,
-       7,    0,   49,    2, 0x08,    5 /* Private */,
-       8,    0,   50,    2, 0x08,    6 /* Private */,
+       3,    0,   47,    2, 0x0a,    3 /* Public */,
+       4,    0,   48,    2, 0x0a,    4 /* Public */,
+       5,    0,   49,    2, 0x0a,    5 /* Public */,
+       6,    0,   50,    2, 0x0a,    6 /* Public */,
 
  // signals: parameters
-    QMetaType::Void, 0x80000000 | 3,    4,
+    QMetaType::Void, QMetaType::UShort,    2,
 
  // slots: parameters
     QMetaType::Void,
@@ -96,7 +94,7 @@ Q_CONSTINIT const QMetaObject newMediaTypeDialog::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<newMediaTypeDialog, std::true_type>,
         // method 'mediaTypeChosen'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<AbstractMedia::mediaType, std::false_type>,
+        QtPrivate::TypeAndForceComplete<unsigned short int, std::false_type>,
         // method 'onAudiobookButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onMusicButtonClicked'
@@ -114,7 +112,7 @@ void newMediaTypeDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
     auto *_t = static_cast<newMediaTypeDialog *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->mediaTypeChosen((*reinterpret_cast< std::add_pointer_t<AbstractMedia::mediaType>>(_a[1]))); break;
+        case 0: _t->mediaTypeChosen((*reinterpret_cast< std::add_pointer_t<ushort>>(_a[1]))); break;
         case 1: _t->onAudiobookButtonClicked(); break;
         case 2: _t->onMusicButtonClicked(); break;
         case 3: _t->onPodcastButtonClicked(); break;
@@ -125,7 +123,7 @@ void newMediaTypeDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
     if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _q_method_type = void (newMediaTypeDialog::*)(AbstractMedia::mediaType );
+            using _q_method_type = void (newMediaTypeDialog::*)(unsigned short int );
             if (_q_method_type _q_method = &newMediaTypeDialog::mediaTypeChosen; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
@@ -166,7 +164,7 @@ int newMediaTypeDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void newMediaTypeDialog::mediaTypeChosen(AbstractMedia::mediaType _t1)
+void newMediaTypeDialog::mediaTypeChosen(unsigned short int _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

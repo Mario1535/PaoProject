@@ -1,8 +1,5 @@
 #include "newmediatypedialog.h"
 #include "ui_newmediatypedialog.h"
-#include "mediaeditor.h"
-#include "mainwindow.h"
-#include "abstractmedia.h"
 
 newMediaTypeDialog::newMediaTypeDialog(QWidget *parent)
     : QWidget(parent)

@@ -1,3 +1,4 @@
+debug/mediamanager.o
 debug/concretevisitor.o
 debug/visitor.o
 debug/abstractmedia.o

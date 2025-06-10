@@ -5,7 +5,6 @@
 #include <string>
 #include <QObject>
 
-
 #include "..\media\abstractMedia.h"
 
 class Container : public QObject
@@ -19,14 +18,10 @@ public:
     void remove(const AbstractMedia*);
     void add(const AbstractMedia*);
     const AbstractMedia* getMedia(std::string &)const;
-    std::vector<const AbstractMedia*> getMediaVec()const;
 
+    bool search(Container*, std::string);
     std::vector<const AbstractMedia*>::const_iterator begin() const;
     std::vector<const AbstractMedia*>::const_iterator end() const;
-    void search(Container*, std::string);
-    bool empty();
-    void clear();
-    int size();
 
 };
 

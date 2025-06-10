@@ -74,7 +74,7 @@ private:
 
     void setupUI();  // Helper function to organize UI setup
 
-    Container container;
+    Container *container;
 };
 
 #endif // MAINWINDOW_H

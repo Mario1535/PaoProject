@@ -1,10 +1,17 @@
 #ifndef MEDIAMANAGER_H
 #define MEDIAMANAGER_H
 
-class mediamanager
+#include "../media/abstractmedia.h"
+
+class mediaManager
 {
 public:
-    mediamanager();
+    mediaManager();
+    ~mediaManager();
+
+    bool mediaCreated(const AbstractMedia*);
+    bool mediaEdited(const AbstractMedia*);
+    bool mediaDeleted(const AbstractMedia*);
 };
 
 #endif // MEDIAMANAGER_H
