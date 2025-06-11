@@ -5,7 +5,7 @@ mediaManager::mediaManager() {}
 
 mediaManager::~mediaManager() {}
 
-bool mediaCreated(const AbstractMedia* media,Container* container){
+bool mediaManager::mediaCreated(const AbstractMedia* media,Container* container){
     for (auto it = container->begin(); it != container->end(); ++it) {
         if (media->getTitle() == (*it)->getTitle()) {
             return false;
@@ -14,10 +14,22 @@ bool mediaCreated(const AbstractMedia* media,Container* container){
     container->add(media);
     return true;
 }
-bool mediaEdited(Container* container, std::string title, Visitor* visitor){
-
+bool mediaManager::mediaEdited(Container* container, std::string title, Visitor* visitor){
+    for (auto it = container->begin(); it != container->end(); ++it) {
+        if ((*it)->getTitle() == title) {
+            (*it)->accept(visitor);
+            container->remove(*it);
+            return true;
+        }
+    }
+    return false;
 }
-bool mediaDeleted(const AbstractMedia* media){
-
+bool mediaManager::mediaDeleted(Container* container, const std::string title){
+    for (auto it = container->begin(); it != container->end(); ++it) {
+        if ((*it)->getTitle() == title) {
+            container->remove(*it);
+            return true;
+        }
+    }
+    return false;
 }
-

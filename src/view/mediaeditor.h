@@ -3,9 +3,7 @@
 
 #include <QDialog>
 #include "..\media\abstractMedia.h"
-#include "..\media\music.h"
-#include "..\media\podcast.h"
-#include "..\media\audiobook.h"
+#include "..\visitor\concretevisitor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mediaEditor; }
@@ -19,8 +17,7 @@ public:
     explicit mediaEditor(QWidget *parent = nullptr);
     ~mediaEditor();
 
-    void loadMedia(Visitor*);  // Carica i dati di un media esistente
-    AbstractMedia* getMedia();  // Restituisce il media modificato/creato
+    void loadMedia(ConcreteVisitor*);  // Carica i dati di un media esistente
 
 private slots:
     void onSaveButtonClicked();  // Slot per salvare le modifiche

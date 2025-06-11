@@ -110,34 +110,47 @@ void mediaEditor::onSaveButtonClicked() {
     accept();
 }
 
-void mediaEditor::loadMedia(Visitor* visitor) {
-    currentMedia = media;
-    ui->photoLabel->setPixmap(QPixmap(QString::fromStdString(media->getImagePath())).scaled(200, 200, Qt::KeepAspectRatio));
-    ui->titleLine->setText(QString::fromStdString(media->getTitle()));
-    ui->authorLine->setText(QString::fromStdString(media->getAuthor()));
-    ui->yearLine->setValue(media->getYear());
-    ui->durationLine->setValue(media->getDuration());
+void mediaEditor::loadMedia(ConcreteVisitor* visitor) {
 
-    if (auto audiobook = dynamic_cast<Audiobook*>(media)) {
-        ui->stackedWidget->setCurrentIndex(0);  // Audiolibro
-        ui->readerLine->setText(QString::fromStdString(audiobook->getReader()));
-        ui->summaryText->setText(QString::fromStdString(audiobook->getSummary()));
-    } else if (auto music = dynamic_cast<Music*>(media)) {
-        ui->stackedWidget->setCurrentIndex(1);  // Musica
-        ui->albumLine->setText(QString::fromStdString(music->getAlbum()));
-        ui->lyricsText->setText(QString::fromStdString(music->getLyrics()));
-    } else if (auto podcast = dynamic_cast<Podcast*>(media)) {
-        ui->stackedWidget->setCurrentIndex(2);  // Podcast
-        ui->episodeLine->setText(QString::fromStdString(podcast->getEpisode()));
-        ui->seasonLine->setText(QString::fromStdString(podcast->getSeason()));
+    const ConcreteVisitor::Attributes &attributes = visitor->getAttributes();
+
+    ui->photoLabel->setPixmap(QPixmap(QString::fromStdString(attributes.imagePath)).scaled(200, 200, Qt::KeepAspectRatio));
+    ui->titleLine->setText(QString::fromStdString(attributes.title));
+    ui->authorLine->setText(QString::fromStdString(attributes.author));
+    ui->yearLine->setValue(attributes.year);
+    ui->durationLine->setValue(attributes.duration);
+
+    if (attributes.details.find("reader") != attributes.details.end()) {
+        ui->stackedWidget->setCurrentIndex(0);
+    } else if (attributes.details.find("album") != attributes.details.end()) {
+        ui->stackedWidget->setCurrentIndex(1);
+    } else if (attributes.details.find("episode") != attributes.details.end()) {
+        ui->stackedWidget->setCurrentIndex(2);
     }
+
+    if (ui->stackedWidget->currentIndex() == 0) {// Libro
+        auto readerIter = attributes.details.find("reader");
+        auto summaryIter = attributes.details.find("summary");
+
+        ui->readerLine->setText((readerIter != attributes.details.end()) ? QString::fromStdString(readerIter->second) : "Unknown");
+        ui->summaryText->setText((summaryIter != attributes.details.end()) ? QString::fromStdString(summaryIter->second) : "Unknown");
+    }
+    else if (ui->stackedWidget->currentIndex() == 1) {// Articolo
+        auto albumIter = attributes.details.find("album");
+        auto lyricsIter = attributes.details.find("lyrics");
+
+        ui->albumLine->setText((albumIter != attributes.details.end()) ? QString::fromStdString(albumIter->second) : "Unknown");
+        ui->lyricsText->setText((lyricsIter != attributes.details.end()) ? QString::fromStdString(lyricsIter->second) : "Unknown");
+    }
+    else if (ui->stackedWidget->currentIndex() == 2) {// Film
+        auto episodeIter = attributes.details.find("episode");
+        auto seasonIter = attributes.details.find("season");
+
+        ui->episodeLine->setText((episodeIter != attributes.details.end()) ? QString::fromStdString(episodeIter->second) : "Unknown");
+        ui->seasonLine->setText((seasonIter != attributes.details.end()) ? QString::fromStdString(seasonIter->second) : "Unknown");
+    }
+
 }
-
-AbstractMedia* mediaEditor::getMedia() {
-    return currentMedia;
-}
-
-
 
 
 

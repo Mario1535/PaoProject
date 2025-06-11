@@ -42,7 +42,7 @@ protected:
 
 private slots:
     // Slot per la barra di ricerca
-    void onSearchTextChanged(const QString &text);
+    void onSearchTextChanged();
 
     // Slot per i menu
     void onLoadActionTriggered();  // Carica i media

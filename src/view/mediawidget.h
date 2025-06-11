@@ -16,7 +16,7 @@ class mediaWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit mediaWidget(AbstractMedia *media, QWidget *parent = nullptr);
+    explicit mediaWidget(const AbstractMedia *media, QWidget *parent = nullptr);
     ~mediaWidget();
 
 signals:

@@ -7,6 +7,7 @@
 #include "newmediatypedialog.h"
 #include "mediaeditor.h"      // Finestra di modifica/creazione media
 #include "mediadetailwidget.h"
+#include "searchoneditaction.h"
 #include "..\container\container.h"
 #include "..\manager\mediamanager.h"
 #include "..\visitor\concretevisitor.h"
@@ -97,8 +98,8 @@ void MainWindow::setupUI()
     mainLayout->setContentsMargins(15, 15, 15, 15);
 }
 
-//new edit remove load actions
 
+//new search edit remove load actions
 void MainWindow::onNewActionTriggered() {
     mediaEditor *editor = new mediaEditor(this);
     newMediaTypeDialog *dialog = new newMediaTypeDialog(this);
@@ -126,34 +127,77 @@ void MainWindow::onNewActionTriggered() {
     delete manager;
 }
 
+void MainWindow::onSearchTextChanged() {
+    clearGridLayout();
+
+    std::string title = (ui->lineEdit->text()).toStdString();
+
+    for (auto it = container->begin(); it != container->end(); ++it) {
+        if ((QString::fromStdString((*it)->getTitle())).contains(QString::fromStdString(title), Qt::CaseInsensitive)) {
+            mediaWidget *mediawidget = new mediaWidget(*it, this);
+            ui->gridLayout->addWidget(mediawidget);
+
+            std::string mediaTitle = (*it)->getTitle();
+
+            //connettere a mediawidget
+            connect(mediawidget, &mediaWidget::clicked, this, [this, mediaTitle]() {
+                emit onEditMediaClicked(mediaTitle);
+                close();
+            });
+        }
+    }
+}
+
 void MainWindow::onEditActionTriggered() {
     mediaEditor *editor = new mediaEditor();
     ConcreteVisitor *visitor = new ConcreteVisitor();
     mediaManager *manager = new mediaManager();
+    searchOnEditAction *search = new searchOnEditAction();
+
+    search->setFocus();
+    search->searchMediaToEdit(container);
+
+    std::string title;
+    connect(search, &searchOnEditAction::onEditMediaClicked, [&title](std::string t) {
+        title = t;
+    });
 
     if (manager->mediaEdited(container, title, visitor)) {
-        connect(editMediaEdit, &EditMedia::onApply, this, &MainWindow::onMediaEdited);
-
         editor->loadMedia(visitor);
         editor->setFocus();
 
-        refreshList();
+        //refreshGrid();
     } else {
-        showError("Media not found");
+
     }
 
     delete editor;
     delete visitor;
+    delete manager;
+    delete search;
 }
 
 void MainWindow::onRemoveActionTriggered() {
-    // Trova il media selezionato
-    AbstractMedia *selectedMedia = getSelectedMedia();
-    if (selectedMedia) {
-        mediaList.removeOne(selectedMedia);
-        delete selectedMedia;
-        loadMedia();  // Ricarica i media
+    searchOnEditAction *search = new searchOnEditAction();
+    mediaManager *manager = new mediaManager();
+
+    search->setFocus();
+    search->searchMediaToEdit(container);
+
+    std::string title;
+    connect(search, &searchOnEditAction::onEditMediaClicked, [&title](std::string t) {
+        title = t;
+    });
+
+    if (manager->mediaDeleted(container, title)) {
+
+        //refreshGrid();
+    } else {
+
     }
+
+    delete manager;
+    delete search;
 }
 
 void MainWindow::onLoadActionTriggered() {
@@ -187,20 +231,6 @@ void MainWindow::loadMedia() {
 
 
 
-//Search bar
-void MainWindow::onSearchTextChanged(const QString &text) {
-    clearGridLayout();
-
-    for (AbstractMedia *media : mediaList) {
-        //modificato, converto in qstring e poi utilizzo contains
-        if ((QString::fromStdString(media->getTitle())).contains(text, Qt::CaseInsensitive)) {
-            mediaWidget *mediawidget = new mediaWidget(media, this);
-            connect(mediawidget, &mediaWidget::clicked, this, &MainWindow::onMediaClicked);
-            ui->gridLayout->addWidget(mediawidget);
-        }
-    }
-}
-
 //show media detail and clear grid layout
 void MainWindow::onMediaClicked(AbstractMedia *media) {
     mediaDetailWidget *detailWidget = new mediaDetailWidget(this);
@@ -215,57 +245,6 @@ void MainWindow::clearGridLayout() {
         delete item;
     }
 }
-
-
-//gestione chiusura mediaeditor
-void MainWindow::closeEvent(QCloseEvent *event) {
-    /*
-    if (hasUnsavedChanges()) {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, "Modifiche non salvate",
-                                      "Ci sono modifiche non salvate. Vuoi salvare prima di uscire?",
-                                      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        if (reply == QMessageBox::Save) {
-            saveChanges();
-        } else if (reply == QMessageBox::Cancel) {
-            event->ignore();
-            return;
-        }
-    }
-    */
-    event->accept();
-}
-
-/*
-#include <QCloseEvent>
-#include <QMessageBox>  // Optional - for confirmation dialogs
-#include <QDebug>       // For debugging
-
-// ... other existing code ...
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    qDebug() << "Attempting to close window";
-
-    // Optional: Add confirmation dialog
-    QMessageBox::StandardButton resBtn = QMessageBox::question(
-        this, "Confirm Exit",
-        tr("Are you sure you want to exit?\n"),
-        QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-        QMessageBox::Yes);
-
-    if (resBtn != QMessageBox::Yes) {
-        event->ignore();  // Don't close the window
-    } else {
-        // Add any cleanup operations here
-        saveSettings();    // Example: Save app settings
-        stopThreads();     // Example: Stop any running threads
-
-        event->accept();   // Accept the event and close
-        qDebug() << "Window closed properly";
-    }
-}
-*/
 
 bool MainWindow::hasUnsavedChanges() const {
     // Implementa la logica per verificare se ci sono modifiche non salvate

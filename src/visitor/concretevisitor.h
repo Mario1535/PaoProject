@@ -29,6 +29,8 @@ public:
     void setAttributes(const Music*);
     void setAttributes(const Podcast*);
 
+    Attributes getAttributes() const;
+
 private:
     Attributes attributes;
 
