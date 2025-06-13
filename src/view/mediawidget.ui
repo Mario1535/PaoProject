@@ -30,7 +30,7 @@
       </property>
      </widget>
     </item>
-    <item>
+    <item alignment="Qt::AlignmentFlag::AlignHCenter">
      <widget class="QLabel" name="titleLabel">
       <property name="maximumSize">
        <size>

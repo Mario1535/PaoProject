@@ -23,31 +23,30 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Connessione della barra di ricerca
     connect(ui->lineEdit, &QLineEdit::textChanged, this, &MainWindow::onSearchTextChanged);
 
-    // Connessione dei menu
     connect(ui->actionLoad, &QAction::triggered, this, &MainWindow::onLoadActionTriggered);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onNewActionTriggered);
     connect(ui->actionEdit, &QAction::triggered, this, &MainWindow::onEditActionTriggered);
     connect(ui->actionRemove, &QAction::triggered, this, &MainWindow::onRemoveActionTriggered);
     connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::onHelpActionTriggered);
 
-    // Set minimum window size
     setMinimumSize(600, 400);
-
-    // Enable size grip in status bar
     statusBar()->setSizeGripEnabled(true);
 
-    // Create central widget and main layout
-    QWidget *centralWidget = new QWidget(this);
-    mainLayout = new QVBoxLayout(centralWidget);
-    centralWidget->setLayout(mainLayout);
-    setCentralWidget(centralWidget);
+    ui->label->setText("Mariofy");
+    ui->label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    ui->label->setAlignment(Qt::AlignCenter);
+    ui->lineEdit->setPlaceholderText("Cerca...");
+    ui->lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    ui->gridContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);\
+    //ui->gridContainer->setLayout(ui->gridLayout);
+    ui->scrollArea->setWidgetResizable(true);
+    //ui->scrollArea->setWidget(ui->gridContainer);
 
     container = new Container();
 
-    setupUI();
+    //setupUI();
 }
 
 MainWindow::~MainWindow()
@@ -58,76 +57,50 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUI()
 {
-    // 1. Create the Grid Layout (will expand)
-    gridLayout = new QGridLayout();
 
-    /*
-    // Add widgets to grid layout (example)
-    gridLayout->addWidget(new QLabel("Item 1"), 0, 0);
-    gridLayout->addWidget(new QLabel("Item 2"), 0, 1);
-    gridLayout->addWidget(new QLabel("Item 3"), 1, 0);
-    gridLayout->addWidget(new QLabel("Item 4"), 1, 1);
-    */
-
-    // Carica i media
-    loadMedia();
-
-    // Make grid layout expand
-    gridLayout->setColumnStretch(0, 1);
-    gridLayout->setColumnStretch(1, 1);
-    gridLayout->setRowStretch(0, 1);
-    gridLayout->setRowStretch(1, 1);
-
-    // 2. Create the Search Bar (fixed height)
-    searchBar = new QLineEdit();
-    searchBar->setPlaceholderText("Search...");
-    searchBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    // 3. Create the Status Label (fixed height)
-    statusLabel = new QLabel("Mariofy");
-    statusLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    statusLabel->setAlignment(Qt::AlignCenter);
-
-    // 4. Add all components to main layout
-    mainLayout->addLayout(gridLayout, 1);  // Takes most space (stretch factor 1)
-    mainLayout->addWidget(searchBar);      // Fixed height
-    mainLayout->addWidget(statusLabel);    // Fixed height
-
-    // Optional: Configure spacing
-    mainLayout->setSpacing(10);
-    mainLayout->setContentsMargins(15, 15, 15, 15);
 }
 
 
 //new search edit remove load actions
 void MainWindow::onNewActionTriggered() {
-    mediaEditor *editor = new mediaEditor(this);
     newMediaTypeDialog *dialog = new newMediaTypeDialog(this);
-    dialog->setFocus(); //faccio scegliere il tipo
-    if (dialog->close() == QDialog::Accepted) { //se il tipo e' stato scelto faccio vedere l'editor
-        editor->setFocus();
-    }
+    mediaWidget *mediawidget;
 
-    // Connessione del segnale di salvataggio al container
-    AbstractMedia* media;
-    connect(editor, &mediaEditor::newMediaCreated, [&media](AbstractMedia* m) {
-        media = m;
+    dialog->setFocus();
+    dialog->exec();
+
+    mediaEditor *editor = new mediaEditor(this);
+    editor->show();
+    connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget](AbstractMedia* media) {
+
+        /*
+        if (!media) {
+            qDebug() << "Errore: media è nullptr!";
+            return;
+        }
+        */
+
+        mediaManager *manager = new mediaManager();
+        if(manager->mediaCreated(media, container)){
+            statusBar()->showMessage("Media salvato!", 3000);
+            mediawidget = new mediaWidget(media, this);
+        }
+        else {
+            statusBar()->showMessage("Media NON salvato", 3000);
+        }
+        delete manager;
     });
 
-    mediaManager *manager = new mediaManager();
-    if(manager->mediaCreated(media)){
-
-    }
-    else {
-
-    }
-
+    editor->exec();
     delete editor;
     delete dialog;
-    delete manager;
+
+    mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    addWidgetInGrid(mediawidget);
 }
 
 void MainWindow::onSearchTextChanged() {
+    qDebug() << "segnale ricerca ricevuto";
     clearGridLayout();
 
     std::string title = (ui->lineEdit->text()).toStdString();
@@ -141,7 +114,7 @@ void MainWindow::onSearchTextChanged() {
 
             //connettere a mediawidget
             connect(mediawidget, &mediaWidget::clicked, this, [this, mediaTitle]() {
-                emit onEditMediaClicked(mediaTitle);
+                //emit onEditMediaClicked(mediaTitle);
                 close();
             });
         }
@@ -217,16 +190,37 @@ void MainWindow::onHelpActionTriggered() {
 }
 
 
-
-//Popolo la main window con i mediawidget tramite funzione load
 void MainWindow::loadMedia() {
-    clearGridLayout();  // Svuota la griglia prima di ricaricare i media
-
-    for (AbstractMedia *media : mediaList) {
-        mediaWidget *mediawidget = new mediaWidget(media, this);
-        connect(mediawidget, &mediaWidget::clicked, this, &MainWindow::onMediaClicked);
-        ui->gridLayout->addWidget(mediawidget);
+    for (auto it = container->begin(); it != container->end(); ++it) {
+        mediaWidget* media = new mediaWidget(*it, this);
+        addWidgetInGrid(media);
     }
+}
+
+void MainWindow::clearGridLayout() {
+    QLayoutItem *item;
+    while ((item = ui->gridLayout->takeAt(0))) {
+        delete item->widget();
+        delete item;
+    }
+}
+
+void MainWindow::refreshGridLayout() {
+    colum = 0;
+    row = 0;
+    clearGridLayout();
+    loadMedia();
+}
+
+void MainWindow::addWidgetInGrid(mediaWidget* widget) {
+    if(colum >= maxColums){
+        colum = 0;
+        row++;
+    }
+    ui->gridLayout->addWidget(widget, row, colum);
+    qDebug() << "media aggiunto alla griglia";
+    colum++;
+    ui->gridLayout->update();
 }
 
 
@@ -238,13 +232,7 @@ void MainWindow::onMediaClicked(AbstractMedia *media) {
     detailWidget->show();
 }
 
-void MainWindow::clearGridLayout() {
-    QLayoutItem *item;
-    while ((item = ui->gridLayout->takeAt(0))) {
-        delete item->widget();
-        delete item;
-    }
-}
+
 
 bool MainWindow::hasUnsavedChanges() const {
     // Implementa la logica per verificare se ci sono modifiche non salvate

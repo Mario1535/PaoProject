@@ -18,6 +18,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -35,9 +36,13 @@ public:
     QWidget *centralwidget;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
+    QWidget *gridContainer;
+    QWidget *gridLayoutWidget;
+    QGridLayout *gridLayout;
     QLabel *label;
     QLineEdit *lineEdit;
-    QGridLayout *gridLayout;
     QMenuBar *menubar;
     QMenu *menuHelp;
     QStatusBar *statusbar;
@@ -65,25 +70,56 @@ public:
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
+        scrollArea = new QScrollArea(verticalLayoutWidget);
+        scrollArea->setObjectName("scrollArea");
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(scrollArea->sizePolicy().hasHeightForWidth());
+        scrollArea->setSizePolicy(sizePolicy);
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 797, 487));
+        QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(scrollAreaWidgetContents->sizePolicy().hasHeightForWidth());
+        scrollAreaWidgetContents->setSizePolicy(sizePolicy1);
+        gridContainer = new QWidget(scrollAreaWidgetContents);
+        gridContainer->setObjectName("gridContainer");
+        gridContainer->setGeometry(QRect(9, 9, 781, 471));
+        sizePolicy1.setHeightForWidth(gridContainer->sizePolicy().hasHeightForWidth());
+        gridContainer->setSizePolicy(sizePolicy1);
+        gridLayoutWidget = new QWidget(gridContainer);
+        gridLayoutWidget->setObjectName("gridLayoutWidget");
+        gridLayoutWidget->setGeometry(QRect(9, 9, 761, 451));
+        gridLayout = new QGridLayout(gridLayoutWidget);
+        gridLayout->setObjectName("gridLayout");
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        scrollArea->setWidget(scrollAreaWidgetContents);
+
+        verticalLayout->addWidget(scrollArea);
+
         label = new QLabel(verticalLayoutWidget);
         label->setObjectName("label");
         label->setMaximumSize(QSize(16777215, 50));
 
-        verticalLayout->addWidget(label);
+        verticalLayout->addWidget(label, 0, Qt::AlignmentFlag::AlignHCenter);
 
         lineEdit = new QLineEdit(verticalLayoutWidget);
         lineEdit->setObjectName("lineEdit");
-        lineEdit->setMaximumSize(QSize(500, 16777215));
+        QSizePolicy sizePolicy2(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
+        lineEdit->setSizePolicy(sizePolicy2);
+        lineEdit->setMaximumSize(QSize(16777215, 16777215));
+        lineEdit->setSizeIncrement(QSize(150, 0));
         lineEdit->setLayoutDirection(Qt::LayoutDirection::LeftToRight);
         lineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
-        verticalLayout->addWidget(lineEdit);
-
-        gridLayout = new QGridLayout();
-        gridLayout->setObjectName("gridLayout");
-        gridLayout->setContentsMargins(10, 10, 10, 10);
-
-        verticalLayout->addLayout(gridLayout);
+        verticalLayout->addWidget(lineEdit, 0, Qt::AlignmentFlag::AlignHCenter);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -118,7 +154,7 @@ public:
         actionRemove->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
         actionHelp->setText(QCoreApplication::translate("MainWindow", "Help", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "title", nullptr));
-        lineEdit->setText(QCoreApplication::translate("MainWindow", "search", nullptr));
+        lineEdit->setText(QString());
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
     } // retranslateUi
 

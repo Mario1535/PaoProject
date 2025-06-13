@@ -41,7 +41,6 @@ static constexpr auto qt_meta_stringdata_ZN10MainWindowE = QtMocHelpers::stringD
     "MainWindow",
     "onSearchTextChanged",
     "",
-    "text",
     "onLoadActionTriggered",
     "onNewActionTriggered",
     "onEditActionTriggered",
@@ -69,22 +68,22 @@ Q_CONSTINIT static const uint qt_meta_data_ZN10MainWindowE[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   56,    2, 0x08,    1 /* Private */,
-       4,    0,   59,    2, 0x08,    3 /* Private */,
-       5,    0,   60,    2, 0x08,    4 /* Private */,
-       6,    0,   61,    2, 0x08,    5 /* Private */,
-       7,    0,   62,    2, 0x08,    6 /* Private */,
-       8,    0,   63,    2, 0x08,    7 /* Private */,
-       9,    1,   64,    2, 0x08,    8 /* Private */,
+       1,    0,   56,    2, 0x08,    1 /* Private */,
+       3,    0,   57,    2, 0x08,    2 /* Private */,
+       4,    0,   58,    2, 0x08,    3 /* Private */,
+       5,    0,   59,    2, 0x08,    4 /* Private */,
+       6,    0,   60,    2, 0x08,    5 /* Private */,
+       7,    0,   61,    2, 0x08,    6 /* Private */,
+       8,    1,   62,    2, 0x08,    7 /* Private */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QString,    3,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 10,   11,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 9,   10,
 
        0        // eod
 };
@@ -100,7 +99,6 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<MainWindow, std::true_type>,
         // method 'onSearchTextChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
         // method 'onLoadActionTriggered'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onNewActionTriggered'
@@ -123,7 +121,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     auto *_t = static_cast<MainWindow *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->onSearchTextChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 0: _t->onSearchTextChanged(); break;
         case 1: _t->onLoadActionTriggered(); break;
         case 2: _t->onNewActionTriggered(); break;
         case 3: _t->onEditActionTriggered(); break;

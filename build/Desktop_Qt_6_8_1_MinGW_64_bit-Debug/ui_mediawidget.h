@@ -45,7 +45,7 @@ public:
         titleLabel->setObjectName("titleLabel");
         titleLabel->setMaximumSize(QSize(16777215, 20));
 
-        verticalLayout->addWidget(titleLabel);
+        verticalLayout->addWidget(titleLabel, 0, Qt::AlignmentFlag::AlignHCenter);
 
 
         retranslateUi(mediaWidget);

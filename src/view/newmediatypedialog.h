@@ -1,13 +1,14 @@
 #ifndef NEWMEDIATYPEDIALOG_H
 #define NEWMEDIATYPEDIALOG_H
 
+#include "qdialog.h"
 #include <QWidget>
 
 namespace Ui {
 class newMediaTypeDialog;
 }
 
-class newMediaTypeDialog : public QWidget
+class newMediaTypeDialog : public QDialog
 {
     Q_OBJECT
 

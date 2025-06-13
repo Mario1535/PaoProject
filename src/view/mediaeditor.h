@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "..\media\abstractMedia.h"
 #include "..\visitor\concretevisitor.h"
+#include "newmediatypedialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mediaEditor; }
@@ -27,9 +28,10 @@ private slots:
 private:
     Ui::mediaEditor *ui;
     AbstractMedia *currentMedia;  // Puntatore al media corrente
+    newMediaTypeDialog *dialog;
     QString photoPath;  // Percorso della foto
 signals:
-    void newMediaCreated(const AbstractMedia*);
+    void newMediaCreated(AbstractMedia*);
 
     //void setupUI();
 };

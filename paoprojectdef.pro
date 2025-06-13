@@ -16,7 +16,6 @@ SOURCES += \
     src/media/abstractmedia.cpp \
     src\media\audiobook.cpp \
     src\container\container.cpp \
-    src\converter\converter.cpp \
     src\main.cpp \
     src\view\mainwindow.cpp \
     src\view\mediadetailwidget.cpp \
@@ -34,7 +33,6 @@ HEADERS += \
     src\media\abstractmedia.h \
     src\media\audiobook.h \
     src\container\container.h \
-    src\converter\converter.h \
     src\view\mainwindow.h \
     src\view\mediadetailwidget.h \
     src\view\mediaeditor.h \

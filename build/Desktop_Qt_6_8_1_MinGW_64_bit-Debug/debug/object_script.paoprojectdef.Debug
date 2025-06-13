@@ -5,7 +5,6 @@ debug/visitor.o
 debug/abstractmedia.o
 debug/audiobook.o
 debug/container.o
-debug/converter.o
 debug/main.o
 debug/mainwindow.o
 debug/mediadetailwidget.o

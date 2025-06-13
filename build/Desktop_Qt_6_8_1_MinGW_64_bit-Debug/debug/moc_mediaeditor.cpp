@@ -40,7 +40,7 @@ static constexpr auto qt_meta_stringdata_ZN11mediaEditorE = QtMocHelpers::string
     "mediaEditor",
     "newMediaCreated",
     "",
-    "const AbstractMedia*",
+    "AbstractMedia*",
     "onSaveButtonClicked",
     "onCancelButtonClicked",
     "onChangePhotoButtonClicked"
@@ -92,7 +92,7 @@ Q_CONSTINIT const QMetaObject mediaEditor::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<mediaEditor, std::true_type>,
         // method 'newMediaCreated'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const AbstractMedia *, std::false_type>,
+        QtPrivate::TypeAndForceComplete<AbstractMedia *, std::false_type>,
         // method 'onSaveButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onCancelButtonClicked'
@@ -108,7 +108,7 @@ void mediaEditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     auto *_t = static_cast<mediaEditor *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->newMediaCreated((*reinterpret_cast< std::add_pointer_t<const AbstractMedia*>>(_a[1]))); break;
+        case 0: _t->newMediaCreated((*reinterpret_cast< std::add_pointer_t<AbstractMedia*>>(_a[1]))); break;
         case 1: _t->onSaveButtonClicked(); break;
         case 2: _t->onCancelButtonClicked(); break;
         case 3: _t->onChangePhotoButtonClicked(); break;
@@ -118,7 +118,7 @@ void mediaEditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _q_method_type = void (mediaEditor::*)(const AbstractMedia * );
+            using _q_method_type = void (mediaEditor::*)(AbstractMedia * );
             if (_q_method_type _q_method = &mediaEditor::newMediaCreated; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
@@ -159,7 +159,7 @@ int mediaEditor::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void mediaEditor::newMediaCreated(const AbstractMedia * _t1)
+void mediaEditor::newMediaCreated(AbstractMedia * _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

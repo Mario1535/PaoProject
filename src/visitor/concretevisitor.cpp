@@ -49,3 +49,7 @@ void ConcreteVisitor::setAttributes(const Podcast* media){
     attributes.details["episode"] = media->getEpisode();
     attributes.details["season"] = media->getSeason();
 }
+
+ConcreteVisitor::Attributes ConcreteVisitor::getAttributes() const {
+    return attributes;
+}

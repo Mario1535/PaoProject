@@ -20,14 +20,14 @@ public:
     ~mediaWidget();
 
 signals:
-    void clicked(AbstractMedia *media);  // Segnale emesso quando il widget viene cliccato
+    void clicked(const AbstractMedia *media);  // Segnale emesso quando il widget viene cliccato
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;  // Gestisce il clic del mouse
 
 private:
     Ui::mediaWidget *ui;
-    AbstractMedia *media;  // Puntatore al media associato
+    const AbstractMedia *media;  // Puntatore al media associato
 };
 
 #endif // MEDIAWIDGET_H

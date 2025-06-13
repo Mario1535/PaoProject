@@ -10,18 +10,13 @@
 #include <QList>
 #include <QCloseEvent>
 #include <QDebug>
+#include <QScrollArea>
+#include <QDebug>
 
-#include "..\media\abstractmedia.h"  // Includi le tue classi media
-#include "..\media\music.h"
-#include "..\media\podcast.h"
-#include "..\media\audiobook.h"
-
-#include "mediawidget.h"    // Widget per visualizzare i media
-#include "mediaeditor.h"      // Finestra di modifica/creazione media
-#include "mediadetailwidget.h"  // Finestra dei dettagli del media
-
+#include "..\media\abstractmedia.h"
+#include "mediawidget.h"
 #include "..\container\container.h"
-#include "..\visitor\visitor.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,7 +33,7 @@ public:
     void loadMedia();  // Carica i media nella griglia
 
 protected:
-    void closeEvent(QCloseEvent *event) override;  // Gestione della chiusura della finestra
+    //void closeEvent(QCloseEvent *event) override;  // Gestione della chiusura della finestra
 
 private slots:
     // Slot per la barra di ricerca
@@ -57,24 +52,27 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    // Lista dei media
-    QList<AbstractMedia*> mediaList;
-
     // Metodi privati
-    void clearGridLayout();  // Svuota la griglia
+    void refreshGridLayout();
+    void clearGridLayout();
+    void addWidgetInGrid(mediaWidget*);
+
     void loadMediaFromFile(const QString &filePath);  // Carica i media da un file DA IMPLEMENTARE
     AbstractMedia* getSelectedMedia() const;  // Restituisce il media selezionato  DA IMPLEMENTARES
     bool hasUnsavedChanges() const;  // Verifica se ci sono modifiche non salvate
     void saveChanges();  // Salva le modifiche
 
     QVBoxLayout *mainLayout;
-    QGridLayout *gridLayout;
+    //QGridLayout *gridLayout;
     QLineEdit *searchBar;
     QLabel *statusLabel;
+    //QScrollArea *scrollArea;
+    Container *container;
+
+    const short unsigned int maxColums = 3;
+    short unsigned int colum = 0, row = 0;
 
     void setupUI();  // Helper function to organize UI setup
-
-    Container *container;
 };
 
 #endif // MAINWINDOW_H

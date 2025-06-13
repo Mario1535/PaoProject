@@ -38,12 +38,11 @@ struct qt_meta_tag_ZN18searchOnEditActionE_t {};
 #ifdef QT_MOC_HAS_STRINGDATA
 static constexpr auto qt_meta_stringdata_ZN18searchOnEditActionE = QtMocHelpers::stringData(
     "searchOnEditAction",
-    "onTextChanged",
-    "",
-    "Container*",
     "onEditMediaClicked",
+    "",
     "std::string",
-    "AbstractMedia*"
+    "searchMediaToEdit",
+    "Container*"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -60,15 +59,19 @@ Q_CONSTINIT static const uint qt_meta_data_ZN18searchOnEditActionE[] = {
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    1,   26,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   26,    2, 0x0a,    1 /* Public */,
        4,    1,   29,    2, 0x0a,    3 /* Public */,
 
- // slots: parameters
+ // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
-    0x80000000 | 5, 0x80000000 | 6,    2,
+
+ // slots: parameters
+    QMetaType::Void, 0x80000000 | 5,    2,
 
        0        // eod
 };
@@ -82,12 +85,12 @@ Q_CONSTINIT const QMetaObject searchOnEditAction::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_tag_ZN18searchOnEditActionE_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<searchOnEditAction, std::true_type>,
-        // method 'onTextChanged'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<Container *, std::false_type>,
         // method 'onEditMediaClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<std::string, std::false_type>,
-        QtPrivate::TypeAndForceComplete<AbstractMedia *, std::false_type>
+        // method 'searchMediaToEdit'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<Container *, std::false_type>
     >,
     nullptr
 } };
@@ -97,22 +100,31 @@ void searchOnEditAction::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
     auto *_t = static_cast<searchOnEditAction *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->onTextChanged((*reinterpret_cast< std::add_pointer_t<Container*>>(_a[1]))); break;
-        case 1: { std::string _r = _t->onEditMediaClicked((*reinterpret_cast< std::add_pointer_t<AbstractMedia*>>(_a[1])));
-            if (_a[0]) *reinterpret_cast< std::string*>(_a[0]) = std::move(_r); }  break;
+        case 0: _t->onEditMediaClicked((*reinterpret_cast< std::add_pointer_t<std::string>>(_a[1]))); break;
+        case 1: _t->searchMediaToEdit((*reinterpret_cast< std::add_pointer_t<Container*>>(_a[1]))); break;
         default: ;
         }
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 0:
+        case 1:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
                 *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< Container* >(); break;
             }
             break;
+        }
+    }
+    if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _q_method_type = void (searchOnEditAction::*)(std::string );
+            if (_q_method_type _q_method = &searchOnEditAction::onEditMediaClicked; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+                *result = 0;
+                return;
+            }
         }
     }
 }
@@ -146,5 +158,12 @@ int searchOnEditAction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         _id -= 2;
     }
     return _id;
+}
+
+// SIGNAL 0
+void searchOnEditAction::onEditMediaClicked(std::string _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_WARNING_POP

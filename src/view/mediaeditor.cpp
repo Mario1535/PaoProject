@@ -6,8 +6,6 @@
 #include "..\media\podcast.h"
 #include "..\media\music.h"
 #include "..\media\audiobook.h"
-
-#include "..\converter\converter.h"
 #include "..\visitor\concretevisitor.h"
 
 #include <QFileDialog>
@@ -29,34 +27,43 @@ mediaEditor::mediaEditor(QWidget *parent)
     connect(ui->closeButton, &QPushButton::clicked, this, &mediaEditor::onCancelButtonClicked);
     connect(ui->photoButton, &QPushButton::clicked, this, &mediaEditor::onChangePhotoButtonClicked);
 
+    dialog = new newMediaTypeDialog();
+    unsigned short int index = 0;
+    QObject::connect(dialog, &newMediaTypeDialog::mediaTypeChosen, this, [&index](unsigned short int value) {
+        index = value;
+
+    });
+    dialog->exec();
+
+    qDebug() << "index:" << index;
+    ui->stackedWidget->setCurrentIndex(index);
+
 }
 
 mediaEditor::~mediaEditor()
 {
     delete ui;
+    delete dialog;
 }
 
 void mediaEditor::onSaveButtonClicked() {
 
-    newMediaTypeDialog dialog;
-    short unsigned int index;
-    QObject::connect(&dialog, &newMediaTypeDialog::mediaTypeChosen, [&index](int value) {
-        index = value;
-        //qDebug() << "index:" << index;
-    });
-
-    ui->stackedWidget->setCurrentIndex(index);
-
     AbstractMedia* media = nullptr;
-    QString title = ui->titleLabel->text();
-    QString author = ui->authorLabel->text();
+    QString title = ui->titleLine->text();
+    QString author = ui->authorLine->text();
     unsigned int duration = ui->durationLine->value();
     unsigned int year = ui->yearLine->value();
-    QPixmap picture;
-
 
     if (ui->stackedWidget->currentIndex() == 0){// audiolibro
-        std::string imagePath = Converter::convertPixmapToPath(picture);
+
+        QString imagePathToSave;
+        if (!photoPath.isEmpty()) {
+            imagePathToSave = photoPath;
+        } else {
+            imagePathToSave = "../../assets/audiobook_default.png";
+        }
+        std::string imagePath = imagePathToSave.toStdString();
+
         media = new Audiobook(
             title.toStdString(),
             author.toStdString(),
@@ -73,7 +80,15 @@ void mediaEditor::onSaveButtonClicked() {
     }
 
     if (ui->stackedWidget->currentIndex()== 1){// musica
-        std::string imagePath = Converter::convertPixmapToPath(picture);
+
+        QString imagePathToSave;
+        if (!photoPath.isEmpty()) {
+            imagePathToSave = photoPath;
+        } else {
+            imagePathToSave = "../../assets/music_default.png";
+        }
+        std::string imagePath = imagePathToSave.toStdString();
+
         media = new Music(
             title.toStdString(),
             author.toStdString(),
@@ -90,7 +105,15 @@ void mediaEditor::onSaveButtonClicked() {
     }
 
     if (ui->stackedWidget->currentIndex() == 2){// podcast
-        std::string imagePath = Converter::convertPixmapToPath(picture);
+
+        QString imagePathToSave;
+        if (!photoPath.isEmpty()) {
+            imagePathToSave = photoPath;
+        } else {
+            imagePathToSave = "../../assets/podcast_default.png";
+        }
+        std::string imagePath = imagePathToSave.toStdString();
+
         media = new Podcast(
             title.toStdString(),
             author.toStdString(),
@@ -102,6 +125,14 @@ void mediaEditor::onSaveButtonClicked() {
             (ui->seasonLine->text()).toStdString()
             );
     }
+
+    qDebug() << "Titolo:" << QString::fromStdString(media->getTitle());
+    qDebug() << "Autore:" << QString::fromStdString(media->getAuthor());
+    qDebug() << "immagine:" << QString::fromStdString(media->getImagePath());
+    //qDebug() << "anno:" << QString::fromStdString(media->getYear());
+    //qDebug() << "durata:" << QString::fromStdString(media->getDuration());
+
+
 
     if (media) {
         emit newMediaCreated(media);  // Notifica il container
