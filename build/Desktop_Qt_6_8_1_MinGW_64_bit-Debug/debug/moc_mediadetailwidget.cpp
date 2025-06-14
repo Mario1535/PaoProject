@@ -42,8 +42,9 @@ static constexpr auto qt_meta_stringdata_ZN17mediaDetailWidgetE = QtMocHelpers::
     "",
     "onRemoveButtonClicked",
     "onCloseButtonClicked",
-    "onLyricsButtonClicked",
-    "onSummaryButtonClicked"
+    "onSummaryButtonClicked",
+    "const AbstractMedia*",
+    "onLyricsButtonClicked"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -66,15 +67,15 @@ Q_CONSTINIT static const uint qt_meta_data_ZN17mediaDetailWidgetE[] = {
        1,    0,   44,    2, 0x08,    1 /* Private */,
        3,    0,   45,    2, 0x08,    2 /* Private */,
        4,    0,   46,    2, 0x08,    3 /* Private */,
-       5,    0,   47,    2, 0x08,    4 /* Private */,
-       6,    0,   48,    2, 0x08,    5 /* Private */,
+       5,    1,   47,    2, 0x08,    4 /* Private */,
+       7,    1,   50,    2, 0x08,    6 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 6,    2,
+    QMetaType::Void, 0x80000000 | 6,    2,
 
        0        // eod
 };
@@ -94,10 +95,12 @@ Q_CONSTINIT const QMetaObject mediaDetailWidget::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onCloseButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onSummaryButtonClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const AbstractMedia *, std::false_type>,
         // method 'onLyricsButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'onSummaryButtonClicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<const AbstractMedia *, std::false_type>
     >,
     nullptr
 } };
@@ -110,12 +113,11 @@ void mediaDetailWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         case 0: _t->onEditButtonClicked(); break;
         case 1: _t->onRemoveButtonClicked(); break;
         case 2: _t->onCloseButtonClicked(); break;
-        case 3: _t->onLyricsButtonClicked(); break;
-        case 4: _t->onSummaryButtonClicked(); break;
+        case 3: _t->onSummaryButtonClicked((*reinterpret_cast< std::add_pointer_t<const AbstractMedia*>>(_a[1]))); break;
+        case 4: _t->onLyricsButtonClicked((*reinterpret_cast< std::add_pointer_t<const AbstractMedia*>>(_a[1]))); break;
         default: ;
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *mediaDetailWidget::metaObject() const

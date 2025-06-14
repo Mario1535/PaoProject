@@ -47,7 +47,7 @@ private slots:
     void onHelpActionTriggered();  // Mostra le scorciatoie
 
     // Slot per la visualizzazione dei dettagli di un media
-    void onMediaClicked(AbstractMedia *media);
+    void onMediaClicked(const AbstractMedia *media);
 
 private:
     Ui::MainWindow *ui;
@@ -55,7 +55,7 @@ private:
     // Metodi privati
     void refreshGridLayout();
     void clearGridLayout();
-    void addWidgetInGrid(mediaWidget*);
+    void addWidgetInGrid(mediaWidget*, const AbstractMedia*);
 
     void loadMediaFromFile(const QString &filePath);  // Carica i media da un file DA IMPLEMENTARE
     AbstractMedia* getSelectedMedia() const;  // Restituisce il media selezionato  DA IMPLEMENTARES

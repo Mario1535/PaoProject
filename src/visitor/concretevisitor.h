@@ -10,6 +10,8 @@ class ConcreteVisitor : public Visitor
 
 public:
     struct Attributes {
+        int index;
+
         std::string title;
         std::string author;
         std::string imagePath;

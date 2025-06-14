@@ -3,9 +3,6 @@
 
 #include <QWidget>
 #include "..\media\abstractMedia.h"
-#include "..\media\music.h"
-#include "..\media\podcast.h"
-#include "..\media\audiobook.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mediaWidget; }
@@ -20,14 +17,13 @@ public:
     ~mediaWidget();
 
 signals:
-    void clicked(const AbstractMedia *media);  // Segnale emesso quando il widget viene cliccato
+    void mediaClicked(const AbstractMedia *media);
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;  // Gestisce il clic del mouse
-
+    void mousePressEvent(QMouseEvent *event) override;
 private:
     Ui::mediaWidget *ui;
-    const AbstractMedia *media;  // Puntatore al media associato
+    const AbstractMedia *media;
 };
 
 #endif // MEDIAWIDGET_H

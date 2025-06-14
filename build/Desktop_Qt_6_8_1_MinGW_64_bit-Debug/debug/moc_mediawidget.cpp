@@ -38,7 +38,7 @@ struct qt_meta_tag_ZN11mediaWidgetE_t {};
 #ifdef QT_MOC_HAS_STRINGDATA
 static constexpr auto qt_meta_stringdata_ZN11mediaWidgetE = QtMocHelpers::stringData(
     "mediaWidget",
-    "clicked",
+    "mediaClicked",
     "",
     "const AbstractMedia*",
     "media"
@@ -78,7 +78,7 @@ Q_CONSTINIT const QMetaObject mediaWidget::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_tag_ZN11mediaWidgetE_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<mediaWidget, std::true_type>,
-        // method 'clicked'
+        // method 'mediaClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const AbstractMedia *, std::false_type>
     >,
@@ -90,7 +90,7 @@ void mediaWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     auto *_t = static_cast<mediaWidget *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->clicked((*reinterpret_cast< std::add_pointer_t<const AbstractMedia*>>(_a[1]))); break;
+        case 0: _t->mediaClicked((*reinterpret_cast< std::add_pointer_t<const AbstractMedia*>>(_a[1]))); break;
         default: ;
         }
     }
@@ -98,7 +98,7 @@ void mediaWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _q_method_type = void (mediaWidget::*)(const AbstractMedia * );
-            if (_q_method_type _q_method = &mediaWidget::clicked; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            if (_q_method_type _q_method = &mediaWidget::mediaClicked; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
             }
@@ -138,7 +138,7 @@ int mediaWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void mediaWidget::clicked(const AbstractMedia * _t1)
+void mediaWidget::mediaClicked(const AbstractMedia * _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

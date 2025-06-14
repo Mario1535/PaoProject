@@ -25,7 +25,7 @@ class Ui_mediaDetailWidget
 public:
     QWidget *horizontalLayoutWidget;
     QHBoxLayout *horizontalLayout;
-    QLabel *pixmapLabel;
+    QLabel *photoLabel;
     QVBoxLayout *verticalLayout;
     QLabel *titleLabel;
     QLabel *authorLabel;
@@ -62,11 +62,11 @@ public:
         horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout->setObjectName("horizontalLayout");
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        pixmapLabel = new QLabel(horizontalLayoutWidget);
-        pixmapLabel->setObjectName("pixmapLabel");
-        pixmapLabel->setMinimumSize(QSize(250, 0));
+        photoLabel = new QLabel(horizontalLayoutWidget);
+        photoLabel->setObjectName("photoLabel");
+        photoLabel->setMinimumSize(QSize(250, 0));
 
-        horizontalLayout->addWidget(pixmapLabel);
+        horizontalLayout->addWidget(photoLabel);
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName("verticalLayout");
@@ -181,7 +181,7 @@ public:
     void retranslateUi(QWidget *mediaDetailWidget)
     {
         mediaDetailWidget->setWindowTitle(QCoreApplication::translate("mediaDetailWidget", "Form", nullptr));
-        pixmapLabel->setText(QCoreApplication::translate("mediaDetailWidget", "pixmap", nullptr));
+        photoLabel->setText(QCoreApplication::translate("mediaDetailWidget", "pixmap", nullptr));
         titleLabel->setText(QCoreApplication::translate("mediaDetailWidget", "title", nullptr));
         authorLabel->setText(QCoreApplication::translate("mediaDetailWidget", "author", nullptr));
         yearLabel->setText(QCoreApplication::translate("mediaDetailWidget", "year", nullptr));

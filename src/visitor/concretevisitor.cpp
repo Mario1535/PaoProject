@@ -18,6 +18,8 @@ void ConcreteVisitor::visit(const Podcast* media){
 }
 
 void ConcreteVisitor::setAttributes(const Audiobook* media){
+    attributes.index = 0;
+
     attributes.title = media->getTitle();
     attributes.author = media->getAuthor();
     attributes.imagePath = media->getImagePath();
@@ -29,6 +31,8 @@ void ConcreteVisitor::setAttributes(const Audiobook* media){
 }
 
 void ConcreteVisitor::setAttributes(const Music* media){
+    attributes.index = 1;
+
     attributes.title = media->getTitle();
     attributes.author = media->getAuthor();
     attributes.imagePath = media->getImagePath();
@@ -40,6 +44,8 @@ void ConcreteVisitor::setAttributes(const Music* media){
 }
 
 void ConcreteVisitor::setAttributes(const Podcast* media){
+    attributes.index = 2;
+
     attributes.title = media->getTitle();
     attributes.author = media->getAuthor();
     attributes.imagePath = media->getImagePath();

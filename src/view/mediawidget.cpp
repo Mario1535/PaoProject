@@ -18,6 +18,6 @@ mediaWidget::~mediaWidget()
 }
 
 void mediaWidget::mousePressEvent(QMouseEvent *event) {
-    emit clicked(media);  // Emetti il segnale quando il widget viene cliccato
+    emit mediaClicked(media);
     QWidget::mousePressEvent(event);
 }

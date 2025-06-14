@@ -11,23 +11,25 @@ CONFIG += c++17
 SOURCES += \
     src/manager/mediamanager.cpp \
     src/view/searchoneditaction.cpp \
+    src/view/textdetailwidget.cpp \
     src/visitor/concretevisitor.cpp \
     src/visitor/visitor.cpp \
     src/media/abstractmedia.cpp \
-    src\media\audiobook.cpp \
-    src\container\container.cpp \
-    src\main.cpp \
-    src\view\mainwindow.cpp \
-    src\view\mediadetailwidget.cpp \
-    src\view\mediaeditor.cpp \
-    src\view\mediawidget.cpp \
-    src\media\music.cpp \
-    src\view\newmediatypedialog.cpp \
-    src\media\podcast.cpp \
+    src/media/audiobook.cpp \
+    src/container/container.cpp \
+    src/main.cpp \
+    src/view/mainwindow.cpp \
+    src/view/mediadetailwidget.cpp \
+    src/view/mediaeditor.cpp \
+    src/view/mediawidget.cpp \
+    src/media/music.cpp \
+    src/view/newmediatypedialog.cpp \
+    src/media/podcast.cpp \
 
 HEADERS += \
     src/manager/mediamanager.h \
     src/view/searchoneditaction.h \
+    src/view/textdetailwidget.h \
     src/visitor/concretevisitor.h \
     src/visitor/visitor.h \
     src\media\abstractmedia.h \
@@ -43,6 +45,7 @@ HEADERS += \
 
 FORMS += \
     src/view/searchoneditaction.ui \
+    src/view/textdetailwidget.ui \
     src\view\mainwindow.ui \
     src\view\mediadetailwidget.ui \
     src\view\mediaeditor.ui \

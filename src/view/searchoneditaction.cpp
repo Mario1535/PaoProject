@@ -29,7 +29,7 @@ void searchOnEditAction::searchMediaToEdit(Container* container){
 
             std::string mediaTitle = (*it)->getTitle();
 
-            connect(mediawidget, &mediaWidget::clicked, this, [this, mediaTitle]() {
+            connect(mediawidget, &mediaWidget::mediaClicked, this, [this, mediaTitle]() {
                 emit onEditMediaClicked(mediaTitle);
                 close();
             });

@@ -69,21 +69,17 @@ void MainWindow::onNewActionTriggered() {
     dialog->setFocus();
     dialog->exec();
 
+    AbstractMedia* media = nullptr;
     mediaEditor *editor = new mediaEditor(this);
     editor->show();
-    connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget](AbstractMedia* media) {
+    connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &media](AbstractMedia* newMedia) {
 
-        /*
-        if (!media) {
-            qDebug() << "Errore: media è nullptr!";
-            return;
-        }
-        */
+        media = newMedia;
 
         mediaManager *manager = new mediaManager();
-        if(manager->mediaCreated(media, container)){
+        if(manager->mediaCreated(newMedia, container)){
             statusBar()->showMessage("Media salvato!", 3000);
-            mediawidget = new mediaWidget(media, this);
+            mediawidget = new mediaWidget(newMedia, this);
         }
         else {
             statusBar()->showMessage("Media NON salvato", 3000);
@@ -96,7 +92,8 @@ void MainWindow::onNewActionTriggered() {
     delete dialog;
 
     mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    addWidgetInGrid(mediawidget);
+
+    addWidgetInGrid(mediawidget, media);
 }
 
 void MainWindow::onSearchTextChanged() {
@@ -113,7 +110,7 @@ void MainWindow::onSearchTextChanged() {
             std::string mediaTitle = (*it)->getTitle();
 
             //connettere a mediawidget
-            connect(mediawidget, &mediaWidget::clicked, this, [this, mediaTitle]() {
+            connect(mediawidget, &mediaWidget::mediaClicked, this, [this, mediaTitle]() {
                 //emit onEditMediaClicked(mediaTitle);
                 close();
             });
@@ -191,9 +188,11 @@ void MainWindow::onHelpActionTriggered() {
 
 
 void MainWindow::loadMedia() {
+    const AbstractMedia* media;
     for (auto it = container->begin(); it != container->end(); ++it) {
-        mediaWidget* media = new mediaWidget(*it, this);
-        addWidgetInGrid(media);
+        mediaWidget* widget = new mediaWidget(*it, this);
+        media = *it;
+        addWidgetInGrid(widget, media);
     }
 }
 
@@ -212,12 +211,16 @@ void MainWindow::refreshGridLayout() {
     loadMedia();
 }
 
-void MainWindow::addWidgetInGrid(mediaWidget* widget) {
+void MainWindow::addWidgetInGrid(mediaWidget* widget, const AbstractMedia* media) {
     if(colum >= maxColums){
         colum = 0;
         row++;
     }
     ui->gridLayout->addWidget(widget, row, colum);
+    //connect(widget, &mediaWidget::mediaClicked, this, &MainWindow::onMediaClicked);
+    connect(widget, &mediaWidget::mediaClicked, this, [=]() {
+        onMediaClicked(media);
+    });
     qDebug() << "media aggiunto alla griglia";
     colum++;
     ui->gridLayout->update();
@@ -225,11 +228,10 @@ void MainWindow::addWidgetInGrid(mediaWidget* widget) {
 
 
 
-//show media detail and clear grid layout
-void MainWindow::onMediaClicked(AbstractMedia *media) {
-    mediaDetailWidget *detailWidget = new mediaDetailWidget(this);
-    detailWidget->loadMediaDetails(media);
-    detailWidget->show();
+void MainWindow::onMediaClicked(const AbstractMedia *media) {
+    mediaDetailWidget *detail = new mediaDetailWidget(this);
+    detail->loadMediaDetails(media);
+    detail->show();
 }
 
 

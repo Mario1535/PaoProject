@@ -1,5 +1,6 @@
 release/mediamanager.o
 release/searchoneditaction.o
+release/textdetailwidget.o
 release/concretevisitor.o
 release/visitor.o
 release/abstractmedia.o
@@ -14,6 +15,7 @@ release/music.o
 release/newmediatypedialog.o
 release/podcast.o
 release/moc_searchoneditaction.o
+release/moc_textdetailwidget.o
 release/moc_container.o
 release/moc_mainwindow.o
 release/moc_mediadetailwidget.o
