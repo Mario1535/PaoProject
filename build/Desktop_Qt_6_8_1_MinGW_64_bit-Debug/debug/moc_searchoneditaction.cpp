@@ -77,7 +77,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN18searchOnEditActionE[] = {
 };
 
 Q_CONSTINIT const QMetaObject searchOnEditAction::staticMetaObject = { {
-    QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
+    QMetaObject::SuperData::link<QDialog::staticMetaObject>(),
     qt_meta_stringdata_ZN18searchOnEditActionE.offsetsAndSizes,
     qt_meta_data_ZN18searchOnEditActionE,
     qt_static_metacall,
@@ -139,12 +139,12 @@ void *searchOnEditAction::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_ZN18searchOnEditActionE.stringdata0))
         return static_cast<void*>(this);
-    return QWidget::qt_metacast(_clname);
+    return QDialog::qt_metacast(_clname);
 }
 
 int searchOnEditAction::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QWidget::qt_metacall(_c, _id, _a);
+    _id = QDialog::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

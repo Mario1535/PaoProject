@@ -1,16 +1,17 @@
 #include "mediadetailwidget.h"
 #include "ui_mediadetailwidget.h"
 #include "textdetailwidget.h"
+#include "mainwindow.h"
 
-mediaDetailWidget::mediaDetailWidget(QWidget *parent)
-    : QDialog(parent)
+mediaDetailWidget::mediaDetailWidget(MainWindow* mainWin, Container* c, std::string t, QWidget *parent)
+    : QDialog(parent) , title(t), container(c), mainWindow(mainWin)
     , ui(new Ui::mediaDetailWidget)
 {
-    //connect(ui->editButton, &QPushButton::clicked, this, &mediaDetailWidget::onEditButtonClicked);
-    //connect(ui->removeButton, &QPushButton::clicked, this, &mediaDetailWidget::onRemoveButtonClicked);
-    //connect(ui->closeButton, &QPushButton::clicked, this, &mediaDetailWidget::onCloseButtonClicked);
-
     ui->setupUi(this);
+
+    connect(ui->editButton, &QPushButton::clicked, this, &mediaDetailWidget::onEditButtonClicked);
+    connect(ui->removeButton, &QPushButton::clicked, this, &mediaDetailWidget::onRemoveButtonClicked);
+    connect(ui->closeButton, &QPushButton::clicked, this, &mediaDetailWidget::onCloseButtonClicked);
 }
 
 mediaDetailWidget::~mediaDetailWidget()
@@ -58,10 +59,14 @@ void mediaDetailWidget::loadMediaDetails(const AbstractMedia* media) {
 }
 
 void mediaDetailWidget::onEditButtonClicked() {
-
+    qDebug() << "edit media button";
+    mainWindow->editMedia(container, title);
+    close();
 }
 void mediaDetailWidget::onRemoveButtonClicked() {
-
+    qDebug() << "remove media button";
+    mainWindow->removeMedia(container, title);
+    close();
 }
 void mediaDetailWidget::onCloseButtonClicked() {
     close();

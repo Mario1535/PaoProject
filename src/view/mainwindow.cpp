@@ -1,21 +1,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "..\media\abstractmedia.h"  // Includi le tue classi media
-
-#include "mediawidget.h"    // Widget per visualizzare i media
-#include "newmediatypedialog.h"
-#include "mediaeditor.h"      // Finestra di modifica/creazione media
+#include "mediawidget.h"
+#include "mediaeditor.h"
 #include "mediadetailwidget.h"
 #include "searchoneditaction.h"
 #include "..\container\container.h"
 #include "..\manager\mediamanager.h"
-#include "..\visitor\concretevisitor.h"
+#include "..\media\abstractmedia.h"
 
 class mediaEditor;
 class mediaWidget;
 class mediaDetailWidget;
-class mediaTextOverlay;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -61,16 +57,14 @@ void MainWindow::setupUI()
 }
 
 
-//new search edit remove load actions
+//slots
 void MainWindow::onNewActionTriggered() {
-    newMediaTypeDialog *dialog = new newMediaTypeDialog(this);
+
+    mediaEditor *editor = new mediaEditor(this);
+    AbstractMedia* media = nullptr;
     mediaWidget *mediawidget;
 
-    dialog->setFocus();
-    dialog->exec();
-
-    AbstractMedia* media = nullptr;
-    mediaEditor *editor = new mediaEditor(this);
+    editor->choice();
     editor->show();
     connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &media](AbstractMedia* newMedia) {
 
@@ -89,7 +83,6 @@ void MainWindow::onNewActionTriggered() {
 
     editor->exec();
     delete editor;
-    delete dialog;
 
     mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -119,55 +112,62 @@ void MainWindow::onSearchTextChanged() {
 }
 
 void MainWindow::onEditActionTriggered() {
+    searchOnEditAction *search = new searchOnEditAction(this);
+
+    search->show();
+    search->searchMediaToEdit(container);
+    search->exec();
+
+    delete search;
+}
+
+void MainWindow::editMedia(Container* container, std::string title){
+    qDebug() << "edit media method";
+
     mediaEditor *editor = new mediaEditor();
     ConcreteVisitor *visitor = new ConcreteVisitor();
     mediaManager *manager = new mediaManager();
-    searchOnEditAction *search = new searchOnEditAction();
-
-    search->setFocus();
-    search->searchMediaToEdit(container);
-
-    std::string title;
-    connect(search, &searchOnEditAction::onEditMediaClicked, [&title](std::string t) {
-        title = t;
-    });
 
     if (manager->mediaEdited(container, title, visitor)) {
+        qDebug() << "editing media";
         editor->loadMedia(visitor);
-        editor->setFocus();
-
-        //refreshGrid();
+        editor->show();
+        editor->exec();
+        //statusBar()->showMessage("Media modificato!", 3000);
+        refreshGridLayout();
     } else {
-
+        //statusBar()->showMessage("Media NON modificato!", 3000);
     }
 
     delete editor;
     delete visitor;
     delete manager;
-    delete search;
 }
 
 void MainWindow::onRemoveActionTriggered() {
-    searchOnEditAction *search = new searchOnEditAction();
-    mediaManager *manager = new mediaManager();
+    searchOnEditAction *search = new searchOnEditAction(this);
 
+    search->show();
     search->setFocus();
     search->searchMediaToEdit(container);
 
-    std::string title;
-    connect(search, &searchOnEditAction::onEditMediaClicked, [&title](std::string t) {
-        title = t;
-    });
+    delete search;
+}
+
+void MainWindow::removeMedia(Container* container, std::string title){
+    qDebug() << "remove media method";
+
+    mediaManager *manager = new mediaManager();
 
     if (manager->mediaDeleted(container, title)) {
-
+        //statusBar()->showMessage("Media eliminato!", 3000);
         //refreshGrid();
     } else {
-
+        //statusBar()->showMessage("Media NON eliminato!", 3000);
     }
 
     delete manager;
-    delete search;
+
 }
 
 void MainWindow::onLoadActionTriggered() {
@@ -186,27 +186,43 @@ void MainWindow::onHelpActionTriggered() {
                                             "Ctrl+S: Salva modifiche");
 }
 
-
-void MainWindow::loadMedia() {
-    const AbstractMedia* media;
-    for (auto it = container->begin(); it != container->end(); ++it) {
-        mediaWidget* widget = new mediaWidget(*it, this);
-        media = *it;
-        addWidgetInGrid(widget, media);
-    }
+void MainWindow::onMediaClicked(const AbstractMedia *media) {
+    mediaDetailWidget *detail = new mediaDetailWidget(this, container, media->getTitle());
+    detail->loadMediaDetails(media);
+    detail->show();
 }
 
+
+//metodi
 void MainWindow::clearGridLayout() {
+    qDebug() << "clear grid layot";
     QLayoutItem *item;
     while ((item = ui->gridLayout->takeAt(0))) {
         delete item->widget();
         delete item;
     }
+    qDebug() << "grid clear";
+}
+
+void MainWindow::loadMedia() {
+    qDebug() << "loading media";
+    const AbstractMedia* media;
+    for (auto it = container->begin(); it != container->end();) {
+        mediaWidget* widget = new mediaWidget(*it, this);
+        media = *it;
+        qDebug() << "carico media: " << media->getTitle();
+        addWidgetInGrid(widget, media);
+
+        it++;
+    }
+    qDebug() << "media loaded";
 }
 
 void MainWindow::refreshGridLayout() {
+    qDebug() << "refresh " << colum << " " << row;
     colum = 0;
     row = 0;
+    qDebug() << "reset colum row " << colum  << " " << row;
     clearGridLayout();
     loadMedia();
 }
@@ -228,28 +244,6 @@ void MainWindow::addWidgetInGrid(mediaWidget* widget, const AbstractMedia* media
 
 
 
-void MainWindow::onMediaClicked(const AbstractMedia *media) {
-    mediaDetailWidget *detail = new mediaDetailWidget(this);
-    detail->loadMediaDetails(media);
-    detail->show();
-}
 
 
-
-bool MainWindow::hasUnsavedChanges() const {
-    // Implementa la logica per verificare se ci sono modifiche non salvate
-    return false;
-}
-
-void MainWindow::saveChanges() {
-    // Implementa la logica per salvare le modifiche
-}
-
-
-
-
-//DA IMPLEMENTARE
-/*
-void MainWindow::loadMediaFromFile(const QString &filePath) {}
-AbstractMedia* MainWindow::getSelectedMedia() const { return nullptr; }
-*/
+//void MainWindow::loadMediaFromFile(const QString &filePath) {} //da implementare

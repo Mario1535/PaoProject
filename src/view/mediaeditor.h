@@ -19,6 +19,8 @@ public:
     ~mediaEditor();
 
     void loadMedia(ConcreteVisitor*);  // Carica i dati di un media esistente
+    void choice();
+    void setIndex();
 
 private slots:
     void onSaveButtonClicked();  // Slot per salvare le modifiche

@@ -1,13 +1,15 @@
 //////////TODO
 
->collegare con successo newmediatypedialog con mediaeditor
+>aggiustare griglia e scrollarea in mainwindow
 
->finire pattern visitor
+>togliere il duplicato di dialog quando si invoca onNewActionTriggered
 
->fare mediamanager
+>togliere dialog da costruttore di editor
 
->aggiustare il salvataggio dei media in container
+>rendere le finestre scalabili
 
->aggiustare griglia mainwindow
+>aggiustare index per mediaDetailWidget
 
->fare editmedia
+>collegare mediaDetailWidget a textDetailWidget
+
+>! gestire il salvataggio in JSON e il caricamento nel container

@@ -1,29 +1,40 @@
 #ifndef SEARCHONEDITACTION_H
 #define SEARCHONEDITACTION_H
 
-#include <QWidget>
+#include <QDialog>
 #include <string>
+#include "mediawidget.h"
 #include "../container/container.h"
-#include "../media/abstractmedia.h"
+
+class MainWindow;
 
 namespace Ui {
 class searchOnEditAction;
 }
 
-class searchOnEditAction : public QWidget
+class searchOnEditAction : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit searchOnEditAction(QWidget *parent = nullptr);
+    explicit searchOnEditAction(MainWindow* mainWindow, QWidget *parent = nullptr);
     ~searchOnEditAction();
 
 public slots:
     void searchMediaToEdit(Container*);
 
 private:
+    void clearGridLayout();
+    void loadMedia();
+    void refreshGridLayout();
+    void addWidgetInGrid(mediaWidget*, const AbstractMedia*);
+
+    MainWindow* mainWindow;
     Ui::searchOnEditAction *ui;
     Container* container;
+
+    short unsigned int maxColums = 2;
+    short unsigned int colum, row;
 
 signals:
     void onEditMediaClicked(std::string);

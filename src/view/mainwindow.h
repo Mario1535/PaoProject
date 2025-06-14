@@ -30,7 +30,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void clearGridLayout();
     void loadMedia();  // Carica i media nella griglia
+    void refreshGridLayout();
+    void addWidgetInGrid(mediaWidget*, const AbstractMedia*);
+
+    void editMedia(Container*, std::string);
+    void removeMedia(Container*, std::string);
 
 protected:
     //void closeEvent(QCloseEvent *event) override;  // Gestione della chiusura della finestra
@@ -42,8 +48,8 @@ private slots:
     // Slot per i menu
     void onLoadActionTriggered();  // Carica i media
     void onNewActionTriggered();   // Aggiungi un nuovo media
-    void onEditActionTriggered();  // Modifica un media esistente
-    void onRemoveActionTriggered(); // Rimuovi un media esistente
+    void onEditActionTriggered();  // Cerca media da modificare
+    void onRemoveActionTriggered(); // Cerca media da rimuovere
     void onHelpActionTriggered();  // Mostra le scorciatoie
 
     // Slot per la visualizzazione dei dettagli di un media
@@ -52,15 +58,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    // Metodi privati
-    void refreshGridLayout();
-    void clearGridLayout();
-    void addWidgetInGrid(mediaWidget*, const AbstractMedia*);
 
     void loadMediaFromFile(const QString &filePath);  // Carica i media da un file DA IMPLEMENTARE
-    AbstractMedia* getSelectedMedia() const;  // Restituisce il media selezionato  DA IMPLEMENTARES
-    bool hasUnsavedChanges() const;  // Verifica se ci sono modifiche non salvate
-    void saveChanges();  // Salva le modifiche
+
 
     QVBoxLayout *mainLayout;
     //QGridLayout *gridLayout;

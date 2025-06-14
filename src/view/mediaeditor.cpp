@@ -27,6 +27,14 @@ mediaEditor::mediaEditor(QWidget *parent)
     connect(ui->closeButton, &QPushButton::clicked, this, &mediaEditor::onCancelButtonClicked);
     connect(ui->photoButton, &QPushButton::clicked, this, &mediaEditor::onChangePhotoButtonClicked);
 
+}
+
+mediaEditor::~mediaEditor()
+{
+    delete ui;
+}
+
+void mediaEditor::choice() {
     dialog = new newMediaTypeDialog();
     unsigned short int index = 0;
     QObject::connect(dialog, &newMediaTypeDialog::mediaTypeChosen, this, [&index](unsigned short int value) {
@@ -38,12 +46,11 @@ mediaEditor::mediaEditor(QWidget *parent)
     qDebug() << "index:" << index;
     ui->stackedWidget->setCurrentIndex(index);
 
+    delete dialog;
 }
 
-mediaEditor::~mediaEditor()
-{
-    delete ui;
-    delete dialog;
+void mediaEditor::setIndex() {
+
 }
 
 void mediaEditor::onSaveButtonClicked() {
