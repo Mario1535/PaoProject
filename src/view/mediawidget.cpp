@@ -1,15 +1,15 @@
 #include "mediawidget.h"
 #include "ui_mediawidget.h"
 
-mediaWidget::mediaWidget(const AbstractMedia *media, QWidget *parent)
+mediaWidget::mediaWidget(ConcreteVisitor *visitor, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::mediaWidget)
-    , media(media)
+    , visitor(visitor)
 {
     ui->setupUi(this);
-    qDebug() << "Titolo ricevuto:" << QString::fromStdString(media->getTitle());
-    ui->titleLabel->setText(QString::fromStdString(media->getTitle()));
-    ui->photoLabel->setPixmap(QPixmap(QString::fromStdString(media->getImagePath())).scaled(200, 200, Qt::KeepAspectRatio));
+    qDebug() << "Titolo ricevuto:" << QString::fromStdString(visitor->getAttributes().title);
+    ui->titleLabel->setText(QString::fromStdString(visitor->getAttributes().title));
+    ui->photoLabel->setPixmap(QPixmap(QString::fromStdString(visitor->getAttributes().imagePath)).scaled(200, 200, Qt::KeepAspectRatio));
 }
 
 mediaWidget::~mediaWidget()
@@ -18,6 +18,6 @@ mediaWidget::~mediaWidget()
 }
 
 void mediaWidget::mousePressEvent(QMouseEvent *event) {
-    emit mediaClicked(media);
+    emit mediaClicked(visitor);
     QWidget::mousePressEvent(event);
 }

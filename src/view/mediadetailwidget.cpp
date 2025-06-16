@@ -19,12 +19,9 @@ mediaDetailWidget::~mediaDetailWidget()
     delete ui;
 }
 
-void mediaDetailWidget::loadMediaDetails(const AbstractMedia* media) {
+void mediaDetailWidget::loadMediaDetails(ConcreteVisitor* visitor) {
 
-    ConcreteVisitor visitor;
-    media->accept(&visitor);
-
-    ConcreteVisitor::Attributes attributes = visitor.getAttributes();
+    ConcreteVisitor::Attributes attributes = visitor->getAttributes();
 
     ui->stackedWidget->setCurrentIndex(attributes.index);
     qDebug() << "index:" << attributes.index;
@@ -35,7 +32,7 @@ void mediaDetailWidget::loadMediaDetails(const AbstractMedia* media) {
     ui->durationLabel->setText(QString::number(attributes.duration) + " min");
 
     QPixmap image(QString::fromStdString(attributes.imagePath));
-    ui->photoLabel->setPixmap(image.scaled(200, 200, Qt::KeepAspectRatio));
+    ui->photoLabel->setPixmap(image.scaled(350, 350, Qt::KeepAspectRatio));
 
     switch (attributes.index) {
     case 0:
@@ -44,7 +41,7 @@ void mediaDetailWidget::loadMediaDetails(const AbstractMedia* media) {
         break;
     case 1:
         ui->albumLabel->setText(QString::fromStdString(attributes.details.at("album")));
-        ui->lyricLabel->setText(QString::fromStdString(attributes.details.at("lyric")));
+        ui->lyricLabel->setText(QString::fromStdString(attributes.details.at("lyrics")));
         break;
     case 2:
         ui->episodeLabel->setText(QString::fromStdString(attributes.details.at("episode")));

@@ -3,7 +3,6 @@
 
 #include <string>
 #include <QDialog>
-#include "../media/abstractmedia.h"
 #include "../visitor/concretevisitor.h"
 #include "../container/container.h"
 
@@ -21,7 +20,7 @@ public:
     explicit mediaDetailWidget(MainWindow*, Container*, std::string, QWidget *parent = nullptr);
     ~mediaDetailWidget();
 
-    void loadMediaDetails(const AbstractMedia*);  // Carica i dettagli di un media
+    void loadMediaDetails(ConcreteVisitor*);
 
 private slots:
     void onEditButtonClicked();

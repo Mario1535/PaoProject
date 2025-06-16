@@ -77,26 +77,27 @@ void MainWindow::setupUI()
 void MainWindow::onNewActionTriggered() {
 
     mediaEditor *editor = new mediaEditor(this);
-    AbstractMedia* media = nullptr;
     mediaWidget *mediawidget;
+    ConcreteVisitor* visitor = new ConcreteVisitor;
 
     if(editor->choice() != -1){
-        bool aborted = false;
+        bool aborted = true;
         editor->show();
 
-        connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &media](AbstractMedia* newMedia) {
+        connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &visitor, &aborted](AbstractMedia* newMedia) {
 
-            media = newMedia;
+            newMedia->accept(visitor);
 
             mediaManager *manager = new mediaManager();
             if(manager->mediaCreated(newMedia, container)){
                 statusBar()->showMessage("Media salvato!", 3000);
-                mediawidget = new mediaWidget(newMedia, this);
+                mediawidget = new mediaWidget(visitor, this);
             }
             else {
                 statusBar()->showMessage("Media NON salvato", 3000);
             }
             delete manager;
+            aborted = false;
         });
         connect(editor, &mediaEditor::abortMediaCreation, this, [&aborted](){
             aborted = true;
@@ -105,33 +106,39 @@ void MainWindow::onNewActionTriggered() {
 
         if(!aborted){
             mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            addWidgetInGrid(mediawidget, media);
+            addWidgetInGrid(mediawidget, visitor);
         }
     }
-
+    delete visitor;
     delete editor;
 }
 
 void MainWindow::onSearchTextChanged() {
     qDebug() << "segnale ricerca ricevuto";
     clearGridLayout();
+    refreshGridCoordinates();
 
     std::string title = (ui->lineEdit->text()).toStdString();
+    ConcreteVisitor* visitor = new ConcreteVisitor;
+
+    if (title.empty()) {
+        for (auto it = container->begin(); it != container->end(); ++it) {
+            (*it)->accept(visitor);
+            mediaWidget *mediawidget = new mediaWidget(visitor, this);
+            addWidgetInGrid(mediawidget, visitor);
+        }
+        delete visitor;
+        return;
+    }
 
     for (auto it = container->begin(); it != container->end(); ++it) {
         if ((QString::fromStdString((*it)->getTitle())).contains(QString::fromStdString(title), Qt::CaseInsensitive)) {
-            mediaWidget *mediawidget = new mediaWidget(*it, this);
-            ui->gridLayout->addWidget(mediawidget);
-
-            std::string mediaTitle = (*it)->getTitle();
-
-            //connettere a mediawidget
-            connect(mediawidget, &mediaWidget::mediaClicked, this, [this, mediaTitle]() {
-                //emit onEditMediaClicked(mediaTitle);
-                close();
-            });
+            (*it)->accept(visitor);
+            mediaWidget *mediawidget = new mediaWidget(visitor, this);
+            addWidgetInGrid(mediawidget, visitor);
         }
     }
+    delete visitor;
 }
 
 void MainWindow::editMedia(Container* container, std::string title){
@@ -280,9 +287,9 @@ void MainWindow::onHelpActionTriggered() {
                                             "Ctrl+E: Export data");
 }
 
-void MainWindow::onMediaClicked(const AbstractMedia *media) {
-    mediaDetailWidget *detail = new mediaDetailWidget(this, container, media->getTitle());
-    detail->loadMediaDetails(media);
+void MainWindow::onMediaClicked(ConcreteVisitor* visitor) {
+    mediaDetailWidget *detail = new mediaDetailWidget(this, container, visitor->getAttributes().title);
+    detail->loadMediaDetails(visitor);
     detail->show();
 }
 
@@ -293,7 +300,7 @@ void MainWindow::clearGridLayout() {
     QLayoutItem *item;
     while ((item = ui->gridLayout->takeAt(0))) {
         delete item->widget();
-        delete item;
+        //delete item;
     }
     qDebug() << "grid clear";
 }
@@ -301,35 +308,39 @@ void MainWindow::clearGridLayout() {
 void MainWindow::loadMedia() {
     qDebug() << "loading media";
     const AbstractMedia* media;
+    ConcreteVisitor* visitor = new ConcreteVisitor;
     for (auto it = container->begin(); it != container->end();) {
-        mediaWidget* widget = new mediaWidget(*it, this);
+        (*it)->accept(visitor);
+        mediaWidget* widget = new mediaWidget(visitor, this);
         media = *it;
         qDebug() << "carico media: " << media->getTitle();
-        addWidgetInGrid(widget, media);
+        addWidgetInGrid(widget, visitor);
 
         it++;
     }
     qDebug() << "media loaded";
+    delete visitor;
 }
 
 void MainWindow::refreshGridLayout() {
-    qDebug() << "refresh " << colum << " " << row;
-    colum = 0;
-    row = 0;
-    qDebug() << "reset colum row " << colum  << " " << row;
+    refreshGridCoordinates();
     clearGridLayout();
     loadMedia();
 }
 
-void MainWindow::addWidgetInGrid(mediaWidget* widget, const AbstractMedia* media) {
+void MainWindow::refreshGridCoordinates() {
+    colum  = 0;
+    row = 0;
+}
+
+void MainWindow::addWidgetInGrid(mediaWidget* widget, ConcreteVisitor* visitor) {
     if(colum >= maxColums){
         colum = 0;
         row++;
     }
     ui->gridLayout->addWidget(widget, row, colum);
-    //connect(widget, &mediaWidget::mediaClicked, this, &MainWindow::onMediaClicked);
     connect(widget, &mediaWidget::mediaClicked, this, [=]() {
-        onMediaClicked(media);
+        onMediaClicked(visitor);
     });
     qDebug() << "media aggiunto alla griglia";
     colum++;

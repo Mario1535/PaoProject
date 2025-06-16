@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "../media/abstractmedia.h"
+#include "../visitor/concretevisitor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mediaWidget; }
@@ -13,17 +14,17 @@ class mediaWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit mediaWidget(const AbstractMedia *media, QWidget *parent = nullptr);
+    explicit mediaWidget(ConcreteVisitor *visitor, QWidget *parent = nullptr);
     ~mediaWidget();
 
 signals:
-    void mediaClicked(const AbstractMedia *media);
+    void mediaClicked(ConcreteVisitor* visitor);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
 private:
     Ui::mediaWidget *ui;
-    const AbstractMedia *media;
+    ConcreteVisitor *visitor;
 };
 
 #endif // MEDIAWIDGET_H

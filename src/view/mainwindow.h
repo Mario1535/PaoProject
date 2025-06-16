@@ -37,7 +37,8 @@ public:
     void clearGridLayout();
     void loadMedia();
     void refreshGridLayout();
-    void addWidgetInGrid(mediaWidget*, const AbstractMedia*);
+    void refreshGridCoordinates();
+    void addWidgetInGrid(mediaWidget*, ConcreteVisitor*);
 
     void editMedia(Container*, std::string);
     void removeMedia(Container*, std::string);
@@ -54,7 +55,7 @@ private slots:
     void onExportActionTriggered();
     void onHelpActionTriggered();
 
-    void onMediaClicked(const AbstractMedia *media);
+    void onMediaClicked(ConcreteVisitor *visitor);
 
 private:
     AbstractMedia* load(const QJsonObject&);

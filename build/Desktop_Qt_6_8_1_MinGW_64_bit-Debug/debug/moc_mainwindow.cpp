@@ -46,8 +46,8 @@ static constexpr auto qt_meta_stringdata_ZN10MainWindowE = QtMocHelpers::stringD
     "onExportActionTriggered",
     "onHelpActionTriggered",
     "onMediaClicked",
-    "const AbstractMedia*",
-    "media"
+    "ConcreteVisitor*",
+    "visitor"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -106,7 +106,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onMediaClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const AbstractMedia *, std::false_type>
+        QtPrivate::TypeAndForceComplete<ConcreteVisitor *, std::false_type>
     >,
     nullptr
 } };
@@ -121,7 +121,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 2: _t->onLoadActionTriggered(); break;
         case 3: _t->onExportActionTriggered(); break;
         case 4: _t->onHelpActionTriggered(); break;
-        case 5: _t->onMediaClicked((*reinterpret_cast< std::add_pointer_t<const AbstractMedia*>>(_a[1]))); break;
+        case 5: _t->onMediaClicked((*reinterpret_cast< std::add_pointer_t<ConcreteVisitor*>>(_a[1]))); break;
         default: ;
         }
     }
