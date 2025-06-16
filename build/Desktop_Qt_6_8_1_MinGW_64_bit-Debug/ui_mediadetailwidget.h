@@ -14,6 +14,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -23,7 +24,7 @@ QT_BEGIN_NAMESPACE
 class Ui_mediaDetailWidget
 {
 public:
-    QWidget *horizontalLayoutWidget;
+    QVBoxLayout *verticalLayout_5;
     QHBoxLayout *horizontalLayout;
     QLabel *photoLabel;
     QVBoxLayout *verticalLayout;
@@ -36,7 +37,10 @@ public:
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout_2;
     QLabel *readerLabel;
-    QPushButton *summaryButton;
+    QWidget *widget;
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
+    QLabel *summaryLabel;
     QWidget *podcast;
     QWidget *verticalLayoutWidget_3;
     QVBoxLayout *verticalLayout_4;
@@ -46,7 +50,10 @@ public:
     QWidget *verticalLayoutWidget_2;
     QVBoxLayout *verticalLayout_3;
     QLabel *albumLabel;
-    QPushButton *lyricsButton;
+    QWidget *widget_2;
+    QScrollArea *scrollArea_2;
+    QWidget *scrollAreaWidgetContents_2;
+    QLabel *lyricLabel;
     QPushButton *editButton;
     QPushButton *removeButton;
     QPushButton *closeButton;
@@ -56,13 +63,16 @@ public:
         if (mediaDetailWidget->objectName().isEmpty())
             mediaDetailWidget->setObjectName("mediaDetailWidget");
         mediaDetailWidget->resize(496, 463);
-        horizontalLayoutWidget = new QWidget(mediaDetailWidget);
-        horizontalLayoutWidget->setObjectName("horizontalLayoutWidget");
-        horizontalLayoutWidget->setGeometry(QRect(-1, -1, 491, 451));
-        horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(mediaDetailWidget->sizePolicy().hasHeightForWidth());
+        mediaDetailWidget->setSizePolicy(sizePolicy);
+        verticalLayout_5 = new QVBoxLayout(mediaDetailWidget);
+        verticalLayout_5->setObjectName("verticalLayout_5");
+        horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName("horizontalLayout");
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        photoLabel = new QLabel(horizontalLayoutWidget);
+        photoLabel = new QLabel(mediaDetailWidget);
         photoLabel->setObjectName("photoLabel");
         photoLabel->setMinimumSize(QSize(250, 0));
 
@@ -70,27 +80,27 @@ public:
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName("verticalLayout");
-        titleLabel = new QLabel(horizontalLayoutWidget);
+        titleLabel = new QLabel(mediaDetailWidget);
         titleLabel->setObjectName("titleLabel");
 
         verticalLayout->addWidget(titleLabel);
 
-        authorLabel = new QLabel(horizontalLayoutWidget);
+        authorLabel = new QLabel(mediaDetailWidget);
         authorLabel->setObjectName("authorLabel");
 
         verticalLayout->addWidget(authorLabel);
 
-        yearLabel = new QLabel(horizontalLayoutWidget);
+        yearLabel = new QLabel(mediaDetailWidget);
         yearLabel->setObjectName("yearLabel");
 
         verticalLayout->addWidget(yearLabel);
 
-        durationLabel = new QLabel(horizontalLayoutWidget);
+        durationLabel = new QLabel(mediaDetailWidget);
         durationLabel->setObjectName("durationLabel");
 
         verticalLayout->addWidget(durationLabel);
 
-        stackedWidget = new QStackedWidget(horizontalLayoutWidget);
+        stackedWidget = new QStackedWidget(mediaDetailWidget);
         stackedWidget->setObjectName("stackedWidget");
         stackedWidget->setMaximumSize(QSize(16777215, 16777215));
         stackedWidget->setLayoutDirection(Qt::LayoutDirection::RightToLeft);
@@ -107,10 +117,21 @@ public:
 
         verticalLayout_2->addWidget(readerLabel);
 
-        summaryButton = new QPushButton(verticalLayoutWidget);
-        summaryButton->setObjectName("summaryButton");
+        widget = new QWidget(verticalLayoutWidget);
+        widget->setObjectName("widget");
+        scrollArea = new QScrollArea(widget);
+        scrollArea->setObjectName("scrollArea");
+        scrollArea->setGeometry(QRect(0, 0, 231, 111));
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 229, 109));
+        summaryLabel = new QLabel(scrollAreaWidgetContents);
+        summaryLabel->setObjectName("summaryLabel");
+        summaryLabel->setGeometry(QRect(0, 0, 231, 111));
+        scrollArea->setWidget(scrollAreaWidgetContents);
 
-        verticalLayout_2->addWidget(summaryButton);
+        verticalLayout_2->addWidget(widget);
 
         stackedWidget->addWidget(audiobook);
         podcast = new QWidget();
@@ -145,32 +166,46 @@ public:
 
         verticalLayout_3->addWidget(albumLabel);
 
-        lyricsButton = new QPushButton(verticalLayoutWidget_2);
-        lyricsButton->setObjectName("lyricsButton");
+        widget_2 = new QWidget(verticalLayoutWidget_2);
+        widget_2->setObjectName("widget_2");
+        scrollArea_2 = new QScrollArea(widget_2);
+        scrollArea_2->setObjectName("scrollArea_2");
+        scrollArea_2->setGeometry(QRect(0, 0, 231, 111));
+        scrollArea_2->setWidgetResizable(true);
+        scrollAreaWidgetContents_2 = new QWidget();
+        scrollAreaWidgetContents_2->setObjectName("scrollAreaWidgetContents_2");
+        scrollAreaWidgetContents_2->setGeometry(QRect(-131, 0, 229, 109));
+        lyricLabel = new QLabel(scrollAreaWidgetContents_2);
+        lyricLabel->setObjectName("lyricLabel");
+        lyricLabel->setGeometry(QRect(0, 0, 231, 111));
+        scrollArea_2->setWidget(scrollAreaWidgetContents_2);
 
-        verticalLayout_3->addWidget(lyricsButton);
+        verticalLayout_3->addWidget(widget_2);
 
         stackedWidget->addWidget(music);
 
         verticalLayout->addWidget(stackedWidget);
 
-        editButton = new QPushButton(horizontalLayoutWidget);
+        editButton = new QPushButton(mediaDetailWidget);
         editButton->setObjectName("editButton");
 
         verticalLayout->addWidget(editButton);
 
-        removeButton = new QPushButton(horizontalLayoutWidget);
+        removeButton = new QPushButton(mediaDetailWidget);
         removeButton->setObjectName("removeButton");
 
         verticalLayout->addWidget(removeButton);
 
-        closeButton = new QPushButton(horizontalLayoutWidget);
+        closeButton = new QPushButton(mediaDetailWidget);
         closeButton->setObjectName("closeButton");
 
         verticalLayout->addWidget(closeButton);
 
 
         horizontalLayout->addLayout(verticalLayout);
+
+
+        verticalLayout_5->addLayout(horizontalLayout);
 
 
         retranslateUi(mediaDetailWidget);
@@ -180,18 +215,18 @@ public:
 
     void retranslateUi(QWidget *mediaDetailWidget)
     {
-        mediaDetailWidget->setWindowTitle(QCoreApplication::translate("mediaDetailWidget", "Form", nullptr));
+        mediaDetailWidget->setWindowTitle(QCoreApplication::translate("mediaDetailWidget", "Media", nullptr));
         photoLabel->setText(QCoreApplication::translate("mediaDetailWidget", "pixmap", nullptr));
         titleLabel->setText(QCoreApplication::translate("mediaDetailWidget", "title", nullptr));
         authorLabel->setText(QCoreApplication::translate("mediaDetailWidget", "author", nullptr));
         yearLabel->setText(QCoreApplication::translate("mediaDetailWidget", "year", nullptr));
         durationLabel->setText(QCoreApplication::translate("mediaDetailWidget", "duration", nullptr));
         readerLabel->setText(QCoreApplication::translate("mediaDetailWidget", "reader", nullptr));
-        summaryButton->setText(QCoreApplication::translate("mediaDetailWidget", "read summary", nullptr));
+        summaryLabel->setText(QCoreApplication::translate("mediaDetailWidget", "summary", nullptr));
         episodeLabel->setText(QCoreApplication::translate("mediaDetailWidget", "episode", nullptr));
         seasonLabel->setText(QCoreApplication::translate("mediaDetailWidget", "season", nullptr));
         albumLabel->setText(QCoreApplication::translate("mediaDetailWidget", "album", nullptr));
-        lyricsButton->setText(QCoreApplication::translate("mediaDetailWidget", "read lyrics", nullptr));
+        lyricLabel->setText(QCoreApplication::translate("mediaDetailWidget", "lyric", nullptr));
         editButton->setText(QCoreApplication::translate("mediaDetailWidget", "edit", nullptr));
         removeButton->setText(QCoreApplication::translate("mediaDetailWidget", "remove", nullptr));
         closeButton->setText(QCoreApplication::translate("mediaDetailWidget", "close", nullptr));

@@ -2,14 +2,6 @@
 
 >aggiustare griglia e scrollarea in mainwindow
 
->togliere il duplicato di dialog quando si invoca onNewActionTriggered
-
->togliere dialog da costruttore di editor
-
->rendere le finestre scalabili
-
->aggiustare index per mediaDetailWidget
-
->collegare mediaDetailWidget a textDetailWidget
+>aggiustare close per mediaDetailWidget
 
 >! gestire il salvataggio in JSON e il caricamento nel container

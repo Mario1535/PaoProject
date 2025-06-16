@@ -16,8 +16,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
@@ -33,8 +31,15 @@ public:
     QAction *actionEdit;
     QAction *actionRemove;
     QAction *actionHelp;
+    QAction *actionNew_2;
+    QAction *actionLoad_2;
+    QAction *actionHelp_2;
+    QAction *actionNew_3;
+    QAction *actionLoad_3;
+    QAction *actionHelp_3;
+    QAction *actionNew_4;
     QWidget *centralwidget;
-    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout;
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
@@ -43,8 +48,6 @@ public:
     QGridLayout *gridLayout;
     QLabel *label;
     QLineEdit *lineEdit;
-    QMenuBar *menubar;
-    QMenu *menuHelp;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -62,15 +65,27 @@ public:
         actionRemove->setObjectName("actionRemove");
         actionHelp = new QAction(MainWindow);
         actionHelp->setObjectName("actionHelp");
+        actionNew_2 = new QAction(MainWindow);
+        actionNew_2->setObjectName("actionNew_2");
+        actionLoad_2 = new QAction(MainWindow);
+        actionLoad_2->setObjectName("actionLoad_2");
+        actionHelp_2 = new QAction(MainWindow);
+        actionHelp_2->setObjectName("actionHelp_2");
+        actionNew_3 = new QAction(MainWindow);
+        actionNew_3->setObjectName("actionNew_3");
+        actionLoad_3 = new QAction(MainWindow);
+        actionLoad_3->setObjectName("actionLoad_3");
+        actionHelp_3 = new QAction(MainWindow);
+        actionHelp_3->setObjectName("actionHelp_3");
+        actionNew_4 = new QAction(MainWindow);
+        actionNew_4->setObjectName("actionNew_4");
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        verticalLayoutWidget = new QWidget(centralwidget);
-        verticalLayoutWidget->setObjectName("verticalLayoutWidget");
-        verticalLayoutWidget->setGeometry(QRect(-1, -1, 801, 551));
-        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout_2 = new QVBoxLayout(centralwidget);
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName("verticalLayout");
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        scrollArea = new QScrollArea(verticalLayoutWidget);
+        scrollArea = new QScrollArea(centralwidget);
         scrollArea->setObjectName("scrollArea");
         QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
         sizePolicy.setHorizontalStretch(0);
@@ -80,7 +95,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 797, 487));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 776, 489));
         QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -93,7 +108,7 @@ public:
         gridContainer->setSizePolicy(sizePolicy1);
         gridLayoutWidget = new QWidget(gridContainer);
         gridLayoutWidget->setObjectName("gridLayoutWidget");
-        gridLayoutWidget->setGeometry(QRect(9, 9, 761, 451));
+        gridLayoutWidget->setGeometry(QRect(10, 10, 761, 451));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName("gridLayout");
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -101,19 +116,20 @@ public:
 
         verticalLayout->addWidget(scrollArea);
 
-        label = new QLabel(verticalLayoutWidget);
+        label = new QLabel(centralwidget);
         label->setObjectName("label");
         label->setMaximumSize(QSize(16777215, 50));
 
         verticalLayout->addWidget(label, 0, Qt::AlignmentFlag::AlignHCenter);
 
-        lineEdit = new QLineEdit(verticalLayoutWidget);
+        lineEdit = new QLineEdit(centralwidget);
         lineEdit->setObjectName("lineEdit");
         QSizePolicy sizePolicy2(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
         lineEdit->setSizePolicy(sizePolicy2);
+        lineEdit->setMinimumSize(QSize(500, 30));
         lineEdit->setMaximumSize(QSize(16777215, 16777215));
         lineEdit->setSizeIncrement(QSize(150, 0));
         lineEdit->setLayoutDirection(Qt::LayoutDirection::LeftToRight);
@@ -121,24 +137,13 @@ public:
 
         verticalLayout->addWidget(lineEdit, 0, Qt::AlignmentFlag::AlignHCenter);
 
+
+        verticalLayout_2->addLayout(verticalLayout);
+
         MainWindow->setCentralWidget(centralwidget);
-        menubar = new QMenuBar(MainWindow);
-        menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 800, 24));
-        menuHelp = new QMenu(menubar);
-        menuHelp->setObjectName("menuHelp");
-        MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
         MainWindow->setStatusBar(statusbar);
-
-        menubar->addAction(menuHelp->menuAction());
-        menuHelp->addAction(actionLoad);
-        menuHelp->addAction(actionNew);
-        menuHelp->addAction(actionEdit);
-        menuHelp->addAction(actionRemove);
-        menuHelp->addSeparator();
-        menuHelp->addAction(actionHelp);
 
         retranslateUi(MainWindow);
 
@@ -147,15 +152,21 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Media library", nullptr));
         actionLoad->setText(QCoreApplication::translate("MainWindow", "Load", nullptr));
         actionNew->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
         actionEdit->setText(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         actionRemove->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
         actionHelp->setText(QCoreApplication::translate("MainWindow", "Help", nullptr));
+        actionNew_2->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
+        actionLoad_2->setText(QCoreApplication::translate("MainWindow", "Load", nullptr));
+        actionHelp_2->setText(QCoreApplication::translate("MainWindow", "Help", nullptr));
+        actionNew_3->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
+        actionLoad_3->setText(QCoreApplication::translate("MainWindow", "Load", nullptr));
+        actionHelp_3->setText(QCoreApplication::translate("MainWindow", "Help", nullptr));
+        actionNew_4->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "title", nullptr));
         lineEdit->setText(QString());
-        menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
     } // retranslateUi
 
 };

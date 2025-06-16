@@ -1,5 +1,5 @@
 #include "container.h"
-#include "..\media\abstractMedia.h"
+#include "../media/abstractmedia.h"
 
 Container::~Container(){
     for (auto mediaItem : media) {

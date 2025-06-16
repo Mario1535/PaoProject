@@ -2,11 +2,11 @@
 #include "ui_mediaeditor.h"
 #include "newmediatypedialog.h"
 
-#include "..\media\abstractMedia.h"
-#include "..\media\podcast.h"
-#include "..\media\music.h"
-#include "..\media\audiobook.h"
-#include "..\visitor\concretevisitor.h"
+#include "../media/abstractmedia.h"
+#include "../media/podcast.h"
+#include "../media/music.h"
+#include "../media/audiobook.h"
+#include "../visitor/concretevisitor.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -21,6 +21,7 @@ mediaEditor::mediaEditor(QWidget *parent)
     , currentMedia(nullptr)
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon("../../assets/window_icons/mediaeditor_icon.png"));
 
     // Connessione dei pulsanti
     connect(ui->saveButton, &QPushButton::clicked, this, &mediaEditor::onSaveButtonClicked);
@@ -34,19 +35,22 @@ mediaEditor::~mediaEditor()
     delete ui;
 }
 
-void mediaEditor::choice() {
+short int mediaEditor::choice() {
     dialog = new newMediaTypeDialog();
-    unsigned short int index = 0;
+    short int index = -1;
     QObject::connect(dialog, &newMediaTypeDialog::mediaTypeChosen, this, [&index](unsigned short int value) {
         index = value;
 
     });
     dialog->exec();
 
-    qDebug() << "index:" << index;
-    ui->stackedWidget->setCurrentIndex(index);
+    if(index != -1){
+        qDebug() << "index:" << index;
+        ui->stackedWidget->setCurrentIndex(index);
+    }
 
     delete dialog;
+    return index;
 }
 
 void mediaEditor::setIndex() {
@@ -55,11 +59,17 @@ void mediaEditor::setIndex() {
 
 void mediaEditor::onSaveButtonClicked() {
 
+    bool ok;
     AbstractMedia* media = nullptr;
     QString title = ui->titleLine->text();
     QString author = ui->authorLine->text();
-    unsigned int duration = ui->durationLine->value();
-    unsigned int year = ui->yearLine->value();
+    double duration = ui->durationLine->text().toDouble(&ok);
+    unsigned int year = ui->yearLine->text().toUInt(&ok);
+
+    if (!ok) {
+        close();
+    }
+
 
     if (ui->stackedWidget->currentIndex() == 0){// audiolibro
 
@@ -67,7 +77,7 @@ void mediaEditor::onSaveButtonClicked() {
         if (!photoPath.isEmpty()) {
             imagePathToSave = photoPath;
         } else {
-            imagePathToSave = "../../assets/audiobook_default.png";
+            imagePathToSave = "../../assets/default_media_images/audiobook_default.png";
         }
         std::string imagePath = imagePathToSave.toStdString();
 
@@ -92,7 +102,7 @@ void mediaEditor::onSaveButtonClicked() {
         if (!photoPath.isEmpty()) {
             imagePathToSave = photoPath;
         } else {
-            imagePathToSave = "../../assets/music_default.png";
+            imagePathToSave = "../../assets/default_media_images/music_default.png";
         }
         std::string imagePath = imagePathToSave.toStdString();
 
@@ -117,7 +127,7 @@ void mediaEditor::onSaveButtonClicked() {
         if (!photoPath.isEmpty()) {
             imagePathToSave = photoPath;
         } else {
-            imagePathToSave = "../../assets/podcast_default.png";
+            imagePathToSave = "../../assets/default_media_images/podcast_default.png";
         }
         std::string imagePath = imagePathToSave.toStdString();
 
@@ -155,8 +165,8 @@ void mediaEditor::loadMedia(ConcreteVisitor* visitor) {
     ui->photoLabel->setPixmap(QPixmap(QString::fromStdString(attributes.imagePath)).scaled(200, 200, Qt::KeepAspectRatio));
     ui->titleLine->setText(QString::fromStdString(attributes.title));
     ui->authorLine->setText(QString::fromStdString(attributes.author));
-    ui->yearLine->setValue(attributes.year);
-    ui->durationLine->setValue(attributes.duration);
+    ui->yearLine->setText(QString::number(attributes.year));
+    ui->durationLine->setText(QString::number(attributes.duration));
 
     if (attributes.details.find("reader") != attributes.details.end()) {
         ui->stackedWidget->setCurrentIndex(0);
@@ -190,12 +200,8 @@ void mediaEditor::loadMedia(ConcreteVisitor* visitor) {
 
 }
 
-
-
-
 void mediaEditor::onCancelButtonClicked() {
-    // Chiudi la finestra senza salvare
-    reject();
+    emit abortMediaCreation();
 }
 
 void mediaEditor::onChangePhotoButtonClicked() {

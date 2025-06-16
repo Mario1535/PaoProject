@@ -5,7 +5,6 @@
 #include <QDialog>
 #include "../media/abstractmedia.h"
 #include "../visitor/concretevisitor.h"
-#include "textdetailwidget.h"
 #include "../container/container.h"
 
 class MainWindow;
@@ -29,16 +28,12 @@ private slots:
     void onRemoveButtonClicked();
     void onCloseButtonClicked();
 
-    void onSummaryButtonClicked(const AbstractMedia*);
-    void onLyricsButtonClicked(const AbstractMedia*);
-
 private:
     std::string title;
     Container* container;
     MainWindow* mainWindow;
     Ui::mediaDetailWidget *ui;
     ConcreteVisitor* visitor;
-    textDetailWidget* text;
 };
 
 #endif // MEDIADETAILWIDGET_H

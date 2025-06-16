@@ -12,10 +12,14 @@
 #include <QDebug>
 #include <QScrollArea>
 #include <QDebug>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 
-#include "..\media\abstractmedia.h"
+#include "../media/abstractmedia.h"
 #include "mediawidget.h"
-#include "..\container\container.h"
+#include "../container/container.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -31,7 +35,7 @@ public:
     ~MainWindow();
 
     void clearGridLayout();
-    void loadMedia();  // Carica i media nella griglia
+    void loadMedia();
     void refreshGridLayout();
     void addWidgetInGrid(mediaWidget*, const AbstractMedia*);
 
@@ -42,25 +46,21 @@ protected:
     //void closeEvent(QCloseEvent *event) override;  // Gestione della chiusura della finestra
 
 private slots:
-    // Slot per la barra di ricerca
+
     void onSearchTextChanged();
 
-    // Slot per i menu
-    void onLoadActionTriggered();  // Carica i media
-    void onNewActionTriggered();   // Aggiungi un nuovo media
-    void onEditActionTriggered();  // Cerca media da modificare
-    void onRemoveActionTriggered(); // Cerca media da rimuovere
-    void onHelpActionTriggered();  // Mostra le scorciatoie
+    void onNewActionTriggered();
+    void onLoadActionTriggered();
+    void onExportActionTriggered();
+    void onHelpActionTriggered();
 
-    // Slot per la visualizzazione dei dettagli di un media
     void onMediaClicked(const AbstractMedia *media);
 
 private:
+    AbstractMedia* load(const QJsonObject&);
+    void handleExport(const QJsonArray&, const QString& = "media.json");
+
     Ui::MainWindow *ui;
-
-
-    void loadMediaFromFile(const QString &filePath);  // Carica i media da un file DA IMPLEMENTARE
-
 
     QVBoxLayout *mainLayout;
     //QGridLayout *gridLayout;
@@ -72,7 +72,7 @@ private:
     const short unsigned int maxColums = 3;
     short unsigned int colum = 0, row = 0;
 
-    void setupUI();  // Helper function to organize UI setup
+    void setupUI();
 };
 
 #endif // MAINWINDOW_H

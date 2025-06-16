@@ -6,6 +6,7 @@ newMediaTypeDialog::newMediaTypeDialog(QWidget *parent)
     , ui(new Ui::newMediaTypeDialog)
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon("../../assets/window_icons/mediatypedialog_icon.png"));
 
     connect(ui->audiobookButton, &QPushButton::clicked, this, &newMediaTypeDialog::onAudiobookButtonClicked);
     connect(ui->musicButton, &QPushButton::clicked, this, &newMediaTypeDialog::onMusicButtonClicked);
@@ -20,19 +21,20 @@ newMediaTypeDialog::~newMediaTypeDialog()
 
 void newMediaTypeDialog::onAudiobookButtonClicked() {
     qDebug() << "emit mediaTypeChosen(0);";
-    emit mediaTypeChosen(0);  // Notifica la MainWindow
-    close();
+    emit mediaTypeChosen(0);
+    accept();
 }
 void newMediaTypeDialog::onMusicButtonClicked() {
     qDebug() << "emit mediaTypeChosen(1);";
-    emit mediaTypeChosen(1);  // Notifica la MainWindow
-    close();
+    emit mediaTypeChosen(1);
+    accept();
 }
 void newMediaTypeDialog::onPodcastButtonClicked() {
     qDebug() << "emit mediaTypeChosen(2);";
-    emit mediaTypeChosen(2);  // Notifica la MainWindow
-    close();
+    emit mediaTypeChosen(2);
+    accept();
 }
 void newMediaTypeDialog::onCancelButtonClicked() {
-    close();
+    emit mediaTypeChosen(-1);
+    accept();;
 }

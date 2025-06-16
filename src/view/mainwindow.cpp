@@ -1,13 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "qmenubar.h"
 #include "mediawidget.h"
 #include "mediaeditor.h"
 #include "mediadetailwidget.h"
-#include "searchoneditaction.h"
-#include "..\container\container.h"
-#include "..\manager\mediamanager.h"
-#include "..\media\abstractmedia.h"
+#include "../container/container.h"
+#include "../manager/mediamanager.h"
+#include "../media/abstractmedia.h"
+#include "../media/audiobook.h"
+#include "../media/music.h"
+#include "../media/podcast.h"
+#include "../visitor/jsonvisitor.h"
 
 class mediaEditor;
 class mediaWidget;
@@ -18,14 +21,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon("../../assets/window_icons/mainwindow_icon.png"));
+    setupUI();
 
     connect(ui->lineEdit, &QLineEdit::textChanged, this, &MainWindow::onSearchTextChanged);
-
-    connect(ui->actionLoad, &QAction::triggered, this, &MainWindow::onLoadActionTriggered);
-    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onNewActionTriggered);
-    connect(ui->actionEdit, &QAction::triggered, this, &MainWindow::onEditActionTriggered);
-    connect(ui->actionRemove, &QAction::triggered, this, &MainWindow::onRemoveActionTriggered);
-    connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::onHelpActionTriggered);
 
     setMinimumSize(600, 400);
     statusBar()->setSizeGripEnabled(true);
@@ -41,8 +40,6 @@ MainWindow::MainWindow(QWidget *parent)
     //ui->scrollArea->setWidget(ui->gridContainer);
 
     container = new Container();
-
-    //setupUI();
 }
 
 MainWindow::~MainWindow()
@@ -53,7 +50,26 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUI()
 {
+    QMenuBar* menubar = new QMenuBar(this);
+    setMenuBar(menubar);
 
+    QMenu* mediaMenu = menubar->addMenu("Media");
+
+    QAction* actionNew = new QAction("New", this);
+    QAction* actionLoad = new QAction("Load", this);
+    QAction* actionExport = new QAction("Export", this);
+    mediaMenu->addAction(actionNew);
+    mediaMenu->addAction(actionLoad);
+    mediaMenu->addAction(actionExport);
+    connect(actionNew, &QAction::triggered, this, &MainWindow::onNewActionTriggered);
+    connect(actionLoad, &QAction::triggered, this, &MainWindow::onLoadActionTriggered);
+    connect(actionExport, &QAction::triggered, this, &MainWindow::onExportActionTriggered);
+
+    QMenu* helpMenu = menubar->addMenu("Help");
+
+    QAction* actionHelp = new QAction("Help", this);
+    helpMenu->addAction(actionHelp);
+    connect(actionHelp, &QAction::triggered, this, &MainWindow::onHelpActionTriggered);
 }
 
 
@@ -64,29 +80,36 @@ void MainWindow::onNewActionTriggered() {
     AbstractMedia* media = nullptr;
     mediaWidget *mediawidget;
 
-    editor->choice();
-    editor->show();
-    connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &media](AbstractMedia* newMedia) {
+    if(editor->choice() != -1){
+        bool aborted = false;
+        editor->show();
 
-        media = newMedia;
+        connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &media](AbstractMedia* newMedia) {
 
-        mediaManager *manager = new mediaManager();
-        if(manager->mediaCreated(newMedia, container)){
-            statusBar()->showMessage("Media salvato!", 3000);
-            mediawidget = new mediaWidget(newMedia, this);
+            media = newMedia;
+
+            mediaManager *manager = new mediaManager();
+            if(manager->mediaCreated(newMedia, container)){
+                statusBar()->showMessage("Media salvato!", 3000);
+                mediawidget = new mediaWidget(newMedia, this);
+            }
+            else {
+                statusBar()->showMessage("Media NON salvato", 3000);
+            }
+            delete manager;
+        });
+        connect(editor, &mediaEditor::abortMediaCreation, this, [&aborted](){
+            aborted = true;
+        });
+        editor->exec();
+
+        if(!aborted){
+            mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            addWidgetInGrid(mediawidget, media);
         }
-        else {
-            statusBar()->showMessage("Media NON salvato", 3000);
-        }
-        delete manager;
-    });
+    }
 
-    editor->exec();
     delete editor;
-
-    mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    addWidgetInGrid(mediawidget, media);
 }
 
 void MainWindow::onSearchTextChanged() {
@@ -111,16 +134,6 @@ void MainWindow::onSearchTextChanged() {
     }
 }
 
-void MainWindow::onEditActionTriggered() {
-    searchOnEditAction *search = new searchOnEditAction(this);
-
-    search->show();
-    search->searchMediaToEdit(container);
-    search->exec();
-
-    delete search;
-}
-
 void MainWindow::editMedia(Container* container, std::string title){
     qDebug() << "edit media method";
 
@@ -133,25 +146,18 @@ void MainWindow::editMedia(Container* container, std::string title){
         editor->loadMedia(visitor);
         editor->show();
         editor->exec();
-        //statusBar()->showMessage("Media modificato!", 3000);
+        for (auto it = container->begin(); it != container->end();) {
+            qDebug() << "media: " << (*it)->getTitle();
+        }
+        statusBar()->showMessage("Media modificato!", 3000);
         refreshGridLayout();
     } else {
-        //statusBar()->showMessage("Media NON modificato!", 3000);
+        statusBar()->showMessage("Media NON modificato!", 3000);
     }
 
     delete editor;
     delete visitor;
     delete manager;
-}
-
-void MainWindow::onRemoveActionTriggered() {
-    searchOnEditAction *search = new searchOnEditAction(this);
-
-    search->show();
-    search->setFocus();
-    search->searchMediaToEdit(container);
-
-    delete search;
 }
 
 void MainWindow::removeMedia(Container* container, std::string title){
@@ -160,10 +166,10 @@ void MainWindow::removeMedia(Container* container, std::string title){
     mediaManager *manager = new mediaManager();
 
     if (manager->mediaDeleted(container, title)) {
-        //statusBar()->showMessage("Media eliminato!", 3000);
-        //refreshGrid();
+        statusBar()->showMessage("Media eliminato!", 3000);
+        refreshGridLayout();
     } else {
-        //statusBar()->showMessage("Media NON eliminato!", 3000);
+        statusBar()->showMessage("Media NON eliminato!", 3000);
     }
 
     delete manager;
@@ -171,19 +177,107 @@ void MainWindow::removeMedia(Container* container, std::string title){
 }
 
 void MainWindow::onLoadActionTriggered() {
-    QString filePath = QFileDialog::getOpenFileName(this, "Carica media", "", "File di media (*.json)");
-    if (!filePath.isEmpty()) {
-        // Carica i media dal file
-        //loadMediaFromFile(filePath);
+    QString path = QFileDialog::getOpenFileName(this, "Apri file JSON", "", "JSON (*.json)");
+    if (path.isEmpty()) return;
+
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning("Impossibile aprire il file.");
+        return;
+    }
+
+    QByteArray data = file.readAll();
+    file.close();
+
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
+    if (parseError.error != QJsonParseError::NoError || !doc.isArray()) {
+        qWarning("Errore nel parsing del JSON.");
+        return;
+    }
+
+    QJsonArray array = doc.array();
+    mediaManager* manager = new mediaManager();
+    for (QJsonArray::const_iterator it = array.constBegin(); it != array.constEnd(); ++it) {
+        if (!it->isObject())
+            continue;
+
+        const QJsonObject obj = it->toObject();
+        const AbstractMedia* media = load(obj);
+
+        if (manager->mediaCreated(media, container)) {
+            qDebug() << "il media: " << media->getTitle();
+            statusBar()->showMessage("Media aggiunto!", 3000);
+        } else {
+            statusBar()->showMessage("Media NON aggiunto", 3000);
+        }
+    }
+
+    delete manager;
+    qDebug() << "TUTTI I MEDIA AGGIUNTI";
+    refreshGridLayout();
+}
+
+AbstractMedia* MainWindow::load(const QJsonObject& obj) {
+    QString type = obj["type"].toString();
+
+    if (type == "Audiobook") {
+        return new Audiobook(obj["title"].toString().toStdString(),
+                             obj["author"].toString().toStdString(),
+                             obj["imagepath"].toString().toStdString(),
+                             static_cast<unsigned int>(obj["year"].toInt()),
+                             obj["duration"].toDouble(),
+                             obj["reader"].toString().toStdString(),
+                             obj["summary"].toString().toStdString());
+    } else if (type == "Music") {
+        return new Music(obj["title"].toString().toStdString(),
+                         obj["author"].toString().toStdString(),
+                         obj["imagepath"].toString().toStdString(),
+                         static_cast<unsigned int>(obj["year"].toInt()),
+                         obj["duration"].toDouble(),
+                         obj["album"].toString().toStdString(),
+                         obj["lyric"].toString().toStdString());
+    } else if (type == "Podcast") {
+        return new Podcast(obj["title"].toString().toStdString(),
+                           obj["author"].toString().toStdString(),
+                           obj["imagepath"].toString().toStdString(),
+                           static_cast<unsigned int>(obj["year"].toInt()),
+                           obj["duration"].toDouble(),
+                           obj["episode"].toString().toStdString(),
+                           obj["season"].toString().toStdString());
+    }
+
+    return nullptr;
+}
+
+void MainWindow::onExportActionTriggered() {
+    jsonVisitor visitor;
+    for (auto it = container->begin(); it != container->end(); ++it) {
+        (*it)->accept(&visitor);
+    }
+
+    QString path = QFileDialog::getSaveFileName(this, "Salva file JSON", "", "JSON (*.json)");
+    if (!path.isEmpty()) {
+        handleExport(visitor.getJsonArray(), path);
+    }
+}
+
+void MainWindow::handleExport(const QJsonArray& array, const QString& filePath) {
+    QJsonDocument doc(array);
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly)) {
+        file.write(doc.toJson(QJsonDocument::Indented));
+        file.close();
+    } else {
+        qWarning("Impossibile aprire il file per la scrittura.");
     }
 }
 
 void MainWindow::onHelpActionTriggered() {
     QMessageBox::information(this, "Aiuto", "Scorciatoie:\n"
-                                            "Ctrl+N: Nuovo media\n"
-                                            "Ctrl+E: Modifica media\n"
-                                            "Ctrl+D: Rimuovi media\n"
-                                            "Ctrl+S: Salva modifiche");
+                                            "Ctrl+N: New media\n"
+                                            "Ctrl+L: Load data\n"
+                                            "Ctrl+E: Export data");
 }
 
 void MainWindow::onMediaClicked(const AbstractMedia *media) {
@@ -241,9 +335,3 @@ void MainWindow::addWidgetInGrid(mediaWidget* widget, const AbstractMedia* media
     colum++;
     ui->gridLayout->update();
 }
-
-
-
-
-
-//void MainWindow::loadMediaFromFile(const QString &filePath) {} //da implementare

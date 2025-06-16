@@ -1,6 +1,5 @@
 #include "mediadetailwidget.h"
 #include "ui_mediadetailwidget.h"
-#include "textdetailwidget.h"
 #include "mainwindow.h"
 
 mediaDetailWidget::mediaDetailWidget(MainWindow* mainWin, Container* c, std::string t, QWidget *parent)
@@ -8,6 +7,7 @@ mediaDetailWidget::mediaDetailWidget(MainWindow* mainWin, Container* c, std::str
     , ui(new Ui::mediaDetailWidget)
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon("../../assets/window_icons/mediadetailwidget_icon.png"));
 
     connect(ui->editButton, &QPushButton::clicked, this, &mediaDetailWidget::onEditButtonClicked);
     connect(ui->removeButton, &QPushButton::clicked, this, &mediaDetailWidget::onRemoveButtonClicked);
@@ -40,15 +40,11 @@ void mediaDetailWidget::loadMediaDetails(const AbstractMedia* media) {
     switch (attributes.index) {
     case 0:
         ui->readerLabel->setText(QString::fromStdString(attributes.details.at("reader")));
-        connect(ui->lyricsButton, &QPushButton::clicked, this, [=]() {
-            onLyricsButtonClicked(media);
-        });
+        ui->summaryLabel->setText(QString::fromStdString(attributes.details.at("summary")));
         break;
     case 1:
         ui->albumLabel->setText(QString::fromStdString(attributes.details.at("album")));
-        connect(ui->summaryButton, &QPushButton::clicked, this, [=]() {
-            onSummaryButtonClicked(media);
-        });
+        ui->lyricLabel->setText(QString::fromStdString(attributes.details.at("lyric")));
         break;
     case 2:
         ui->episodeLabel->setText(QString::fromStdString(attributes.details.at("episode")));
@@ -70,15 +66,4 @@ void mediaDetailWidget::onRemoveButtonClicked() {
 }
 void mediaDetailWidget::onCloseButtonClicked() {
     close();
-}
-
-void mediaDetailWidget::onLyricsButtonClicked(const AbstractMedia* media) {
-    auto *textWidget = new textDetailWidget(this);
-    textWidget->showLyrics(media);
-    textWidget->show();
-}
-void mediaDetailWidget::onSummaryButtonClicked(const AbstractMedia* media) {
-    auto *textWidget = new textDetailWidget(this);
-    textWidget->showSummary(media);
-    textWidget->show();
 }

@@ -5,7 +5,7 @@
 #include <string>
 #include <QObject>
 
-#include "..\media\abstractMedia.h"
+#include "../media/abstractmedia.h"
 
 class Container : public QObject
 {

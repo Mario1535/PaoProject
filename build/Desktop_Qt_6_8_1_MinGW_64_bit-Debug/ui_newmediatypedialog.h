@@ -22,7 +22,7 @@ QT_BEGIN_NAMESPACE
 class Ui_newMediaTypeDialog
 {
 public:
-    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout;
     QTextBrowser *textBrowser;
     QHBoxLayout *horizontalLayout;
@@ -35,42 +35,48 @@ public:
     {
         if (newMediaTypeDialog->objectName().isEmpty())
             newMediaTypeDialog->setObjectName("newMediaTypeDialog");
-        newMediaTypeDialog->resize(442, 300);
-        verticalLayoutWidget = new QWidget(newMediaTypeDialog);
-        verticalLayoutWidget->setObjectName("verticalLayoutWidget");
-        verticalLayoutWidget->setGeometry(QRect(-1, -1, 441, 301));
-        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+        newMediaTypeDialog->resize(365, 251);
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(newMediaTypeDialog->sizePolicy().hasHeightForWidth());
+        newMediaTypeDialog->setSizePolicy(sizePolicy);
+        verticalLayout_2 = new QVBoxLayout(newMediaTypeDialog);
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName("verticalLayout");
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        textBrowser = new QTextBrowser(verticalLayoutWidget);
+        textBrowser = new QTextBrowser(newMediaTypeDialog);
         textBrowser->setObjectName("textBrowser");
 
         verticalLayout->addWidget(textBrowser);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName("horizontalLayout");
-        audiobookButton = new QPushButton(verticalLayoutWidget);
+        audiobookButton = new QPushButton(newMediaTypeDialog);
         audiobookButton->setObjectName("audiobookButton");
 
         horizontalLayout->addWidget(audiobookButton);
 
-        musicButton = new QPushButton(verticalLayoutWidget);
+        musicButton = new QPushButton(newMediaTypeDialog);
         musicButton->setObjectName("musicButton");
 
         horizontalLayout->addWidget(musicButton);
 
-        podcastButton = new QPushButton(verticalLayoutWidget);
+        podcastButton = new QPushButton(newMediaTypeDialog);
         podcastButton->setObjectName("podcastButton");
 
         horizontalLayout->addWidget(podcastButton);
 
-        cancelButton = new QPushButton(verticalLayoutWidget);
+        cancelButton = new QPushButton(newMediaTypeDialog);
         cancelButton->setObjectName("cancelButton");
 
         horizontalLayout->addWidget(cancelButton);
 
 
         verticalLayout->addLayout(horizontalLayout);
+
+
+        verticalLayout_2->addLayout(verticalLayout);
 
 
         retranslateUi(newMediaTypeDialog);
@@ -80,7 +86,7 @@ public:
 
     void retranslateUi(QWidget *newMediaTypeDialog)
     {
-        newMediaTypeDialog->setWindowTitle(QCoreApplication::translate("newMediaTypeDialog", "Form", nullptr));
+        newMediaTypeDialog->setWindowTitle(QCoreApplication::translate("newMediaTypeDialog", "Media type", nullptr));
         textBrowser->setHtml(QCoreApplication::translate("newMediaTypeDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

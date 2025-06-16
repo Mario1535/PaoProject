@@ -30,6 +30,11 @@ public:
         if (mediaWidget->objectName().isEmpty())
             mediaWidget->setObjectName("mediaWidget");
         mediaWidget->resize(241, 300);
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(mediaWidget->sizePolicy().hasHeightForWidth());
+        mediaWidget->setSizePolicy(sizePolicy);
         verticalLayoutWidget = new QWidget(mediaWidget);
         verticalLayoutWidget->setObjectName("verticalLayoutWidget");
         verticalLayoutWidget->setGeometry(QRect(0, 0, 241, 301));

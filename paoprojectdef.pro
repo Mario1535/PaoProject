@@ -10,9 +10,8 @@ CONFIG += c++17
 
 SOURCES += \
     src/manager/mediamanager.cpp \
-    src/view/searchoneditaction.cpp \
-    src/view/textdetailwidget.cpp \
     src/visitor/concretevisitor.cpp \
+    src/visitor/jsonvisitor.cpp \
     src/visitor/visitor.cpp \
     src/media/abstractmedia.cpp \
     src/media/audiobook.cpp \
@@ -28,9 +27,8 @@ SOURCES += \
 
 HEADERS += \
     src/manager/mediamanager.h \
-    src/view/searchoneditaction.h \
-    src/view/textdetailwidget.h \
     src/visitor/concretevisitor.h \
+    src/visitor/jsonvisitor.h \
     src/visitor/visitor.h \
     src\media\abstractmedia.h \
     src\media\audiobook.h \
@@ -44,8 +42,6 @@ HEADERS += \
     src\media\podcast.h \
 
 FORMS += \
-    src/view/searchoneditaction.ui \
-    src/view/textdetailwidget.ui \
     src\view\mainwindow.ui \
     src\view\mediadetailwidget.ui \
     src\view\mediaeditor.ui \

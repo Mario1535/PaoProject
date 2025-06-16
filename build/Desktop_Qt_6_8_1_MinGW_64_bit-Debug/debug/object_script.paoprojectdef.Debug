@@ -1,7 +1,6 @@
 debug/mediamanager.o
-debug/searchoneditaction.o
-debug/textdetailwidget.o
 debug/concretevisitor.o
+debug/jsonvisitor.o
 debug/visitor.o
 debug/abstractmedia.o
 debug/audiobook.o
@@ -14,8 +13,6 @@ debug/mediawidget.o
 debug/music.o
 debug/newmediatypedialog.o
 debug/podcast.o
-debug/moc_searchoneditaction.o
-debug/moc_textdetailwidget.o
 debug/moc_container.o
 debug/moc_mainwindow.o
 debug/moc_mediadetailwidget.o

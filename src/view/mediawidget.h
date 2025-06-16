@@ -2,7 +2,7 @@
 #define MEDIAWIDGET_H
 
 #include <QWidget>
-#include "..\media\abstractMedia.h"
+#include "../media/abstractmedia.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mediaWidget; }

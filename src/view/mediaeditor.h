@@ -2,8 +2,8 @@
 #define MEDIAEDITOR_H
 
 #include <QDialog>
-#include "..\media\abstractMedia.h"
-#include "..\visitor\concretevisitor.h"
+#include "../media/abstractmedia.h"
+#include "../visitor/concretevisitor.h"
 #include "newmediatypedialog.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,7 +19,7 @@ public:
     ~mediaEditor();
 
     void loadMedia(ConcreteVisitor*);  // Carica i dati di un media esistente
-    void choice();
+    short int choice();
     void setIndex();
 
 private slots:
@@ -34,6 +34,7 @@ private:
     QString photoPath;  // Percorso della foto
 signals:
     void newMediaCreated(AbstractMedia*);
+    void abortMediaCreation();
 
     //void setupUI();
 };

@@ -1,5 +1,6 @@
 #include "mediamanager.h"
 #include "../container/container.h"
+#include <QDebug>
 
 mediaManager::mediaManager() {}
 
@@ -12,6 +13,7 @@ bool mediaManager::mediaCreated(const AbstractMedia* media,Container* container)
         }
     }
     container->add(media);
+    qDebug() << "il media: " << media->getTitle() << "e' stato aggiunto al container";
     return true;
 }
 bool mediaManager::mediaEdited(Container* container, std::string title, Visitor* visitor){
