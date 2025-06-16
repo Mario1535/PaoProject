@@ -29,12 +29,12 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(600, 400);
     statusBar()->setSizeGripEnabled(true);
 
-    ui->label->setText("Mariofy");
-    ui->label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    ui->label->setAlignment(Qt::AlignCenter);
+    //ui->label->setText("Mariofy");
+    //ui->label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    //ui->label->setAlignment(Qt::AlignCenter);
     ui->lineEdit->setPlaceholderText("Cerca...");
     ui->lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    ui->gridContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);\
+    //ui->gridLayout->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     //ui->gridContainer->setLayout(ui->gridLayout);
     ui->scrollArea->setWidgetResizable(true);
     //ui->scrollArea->setWidget(ui->gridContainer);
@@ -70,6 +70,16 @@ void MainWindow::setupUI()
     QAction* actionHelp = new QAction("Help", this);
     helpMenu->addAction(actionHelp);
     connect(actionHelp, &QAction::triggered, this, &MainWindow::onHelpActionTriggered);
+
+
+    ui->scrollArea->setWidgetResizable(true);
+
+    QVBoxLayout* layout = new QVBoxLayout(ui->gridContainer);
+    layout->addLayout(ui->gridLayout);  // oppure .addWidget(gridLayoutWidget), se usi un wrapper
+    layout->addStretch(); // per evitare schiacciamento
+
+    ui->scrollArea->setWidget(ui->scrollAreaWidgetContents);
+
 }
 
 
@@ -106,10 +116,12 @@ void MainWindow::onNewActionTriggered() {
 
         if(!aborted){
             mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            //mediawidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
             addWidgetInGrid(mediawidget, visitor);
         }
     }
-    delete visitor;
+
     delete editor;
 }
 
@@ -125,6 +137,8 @@ void MainWindow::onSearchTextChanged() {
         for (auto it = container->begin(); it != container->end(); ++it) {
             (*it)->accept(visitor);
             mediaWidget *mediawidget = new mediaWidget(visitor, this);
+            //mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            mediawidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
             addWidgetInGrid(mediawidget, visitor);
         }
         delete visitor;
@@ -135,6 +149,8 @@ void MainWindow::onSearchTextChanged() {
         if ((QString::fromStdString((*it)->getTitle())).contains(QString::fromStdString(title), Qt::CaseInsensitive)) {
             (*it)->accept(visitor);
             mediaWidget *mediawidget = new mediaWidget(visitor, this);
+            mediawidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
             addWidgetInGrid(mediawidget, visitor);
         }
     }
@@ -147,16 +163,33 @@ void MainWindow::editMedia(Container* container, std::string title){
     mediaEditor *editor = new mediaEditor();
     ConcreteVisitor *visitor = new ConcreteVisitor();
     mediaManager *manager = new mediaManager();
+    mediaWidget *mediawidget;
 
     if (manager->mediaEdited(container, title, visitor)) {
         qDebug() << "editing media";
         editor->loadMedia(visitor);
         editor->show();
+        connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &visitor, &container](AbstractMedia* newMedia) {
+
+            newMedia->accept(visitor);
+
+            mediaManager *manager = new mediaManager();
+            if(manager->mediaCreated(newMedia, container)){
+                statusBar()->showMessage("Media salvato!", 3000);
+                mediawidget = new mediaWidget(visitor, this);
+            }
+            else {
+                statusBar()->showMessage("Media NON salvato", 3000);
+            }
+            delete manager;
+        });
         editor->exec();
-        for (auto it = container->begin(); it != container->end();) {
+        for (auto it = container->begin(); it != container->end(); ++it) {
             qDebug() << "media: " << (*it)->getTitle();
         }
         statusBar()->showMessage("Media modificato!", 3000);
+
+
         refreshGridLayout();
     } else {
         statusBar()->showMessage("Media NON modificato!", 3000);
@@ -228,7 +261,7 @@ void MainWindow::onLoadActionTriggered() {
 AbstractMedia* MainWindow::load(const QJsonObject& obj) {
     QString type = obj["type"].toString();
 
-    if (type == "Audiobook") {
+    if (type == "audiobook") {
         return new Audiobook(obj["title"].toString().toStdString(),
                              obj["author"].toString().toStdString(),
                              obj["imagepath"].toString().toStdString(),
@@ -236,7 +269,7 @@ AbstractMedia* MainWindow::load(const QJsonObject& obj) {
                              obj["duration"].toDouble(),
                              obj["reader"].toString().toStdString(),
                              obj["summary"].toString().toStdString());
-    } else if (type == "Music") {
+    } else if (type == "music") {
         return new Music(obj["title"].toString().toStdString(),
                          obj["author"].toString().toStdString(),
                          obj["imagepath"].toString().toStdString(),
@@ -244,7 +277,7 @@ AbstractMedia* MainWindow::load(const QJsonObject& obj) {
                          obj["duration"].toDouble(),
                          obj["album"].toString().toStdString(),
                          obj["lyric"].toString().toStdString());
-    } else if (type == "Podcast") {
+    } else if (type == "podcast") {
         return new Podcast(obj["title"].toString().toStdString(),
                            obj["author"].toString().toStdString(),
                            obj["imagepath"].toString().toStdString(),
@@ -258,14 +291,14 @@ AbstractMedia* MainWindow::load(const QJsonObject& obj) {
 }
 
 void MainWindow::onExportActionTriggered() {
-    jsonVisitor visitor;
+    jsonVisitor* visitor = new jsonVisitor();
     for (auto it = container->begin(); it != container->end(); ++it) {
-        (*it)->accept(&visitor);
+        (*it)->accept(visitor);
     }
 
     QString path = QFileDialog::getSaveFileName(this, "Salva file JSON", "", "JSON (*.json)");
     if (!path.isEmpty()) {
-        handleExport(visitor.getJsonArray(), path);
+        handleExport(visitor->getJsonArray(), path);
     }
 }
 
@@ -288,6 +321,7 @@ void MainWindow::onHelpActionTriggered() {
 }
 
 void MainWindow::onMediaClicked(ConcreteVisitor* visitor) {
+
     mediaDetailWidget *detail = new mediaDetailWidget(this, container, visitor->getAttributes().title);
     detail->loadMediaDetails(visitor);
     detail->show();
@@ -300,7 +334,7 @@ void MainWindow::clearGridLayout() {
     QLayoutItem *item;
     while ((item = ui->gridLayout->takeAt(0))) {
         delete item->widget();
-        //delete item;
+        delete item;
     }
     qDebug() << "grid clear";
 }
@@ -308,18 +342,21 @@ void MainWindow::clearGridLayout() {
 void MainWindow::loadMedia() {
     qDebug() << "loading media";
     const AbstractMedia* media;
-    ConcreteVisitor* visitor = new ConcreteVisitor;
+    ConcreteVisitor* visitor = new ConcreteVisitor();
     for (auto it = container->begin(); it != container->end();) {
         (*it)->accept(visitor);
         mediaWidget* widget = new mediaWidget(visitor, this);
+
+        widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
         media = *it;
         qDebug() << "carico media: " << media->getTitle();
         addWidgetInGrid(widget, visitor);
 
         it++;
     }
-    qDebug() << "media loaded";
-    delete visitor;
+    //qDebug() << "media loaded";
+
 }
 
 void MainWindow::refreshGridLayout() {
@@ -339,8 +376,8 @@ void MainWindow::addWidgetInGrid(mediaWidget* widget, ConcreteVisitor* visitor) 
         row++;
     }
     ui->gridLayout->addWidget(widget, row, colum);
-    connect(widget, &mediaWidget::mediaClicked, this, [=]() {
-        onMediaClicked(visitor);
+     connect(widget, &mediaWidget::mediaClicked, this, [=]() {
+         onMediaClicked(visitor);
     });
     qDebug() << "media aggiunto alla griglia";
     colum++;

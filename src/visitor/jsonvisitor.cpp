@@ -6,18 +6,6 @@
 jsonVisitor::jsonVisitor() {}
 
 void jsonVisitor::visit(const Audiobook* media) {
-    createObj(media, array);
-}
-
-void jsonVisitor::visit(const Music* media) {
-    createObj(media, array);
-}
-
-void jsonVisitor::visit(const Podcast* media) {
-    createObj(media, array);
-}
-
-void jsonVisitor::createObj(const Audiobook* media, QJsonArray array) {
     QJsonObject obj;
     obj["type"] = "audiobook";
 
@@ -31,7 +19,8 @@ void jsonVisitor::createObj(const Audiobook* media, QJsonArray array) {
 
     array.append(obj);
 }
-void jsonVisitor::createObj(const Music* media, QJsonArray array) {
+
+void jsonVisitor::visit(const Music* media) {
     QJsonObject obj;
     obj["type"] = "music";
 
@@ -45,7 +34,8 @@ void jsonVisitor::createObj(const Music* media, QJsonArray array) {
 
     array.append(obj);
 }
-void jsonVisitor::createObj(const Podcast* media, QJsonArray array) {
+
+void jsonVisitor::visit(const Podcast* media) {
     QJsonObject obj;
     obj["type"] = "podcast";
 

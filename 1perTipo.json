@@ -1,0 +1,32 @@
+[
+    {
+        "author": "Roberto Saviano",
+        "duration": 57.57,
+        "imagepath": "temp/maxi.jpg",
+        "reader": "Roberto Saviano",
+        "summary": "\"Maxi - Il processo che ha sconfitto la mafia\" è un racconto corale e profondo sul Maxi Processo di Palermo, che segnò la prima grande vittoria dello Stato contro Cosa Nostra. Attraverso più voci, ricordi e testimonianze, narra come un gruppo di uomini, guidati dalla legge, riuscì a dimostrare l’esistenza della mafia, fino ad allora solo sospettata. È una storia di coraggio, verità e giustizia, con la partecipazione di Massimiliano Coccia e Gaetano Bruno.",
+        "title": "Maxi - il processo che ha sconfitto la mafia",
+        "type": "audiobook",
+        "year": 2022
+    },
+    {
+        "author": "Breccia, Nanni, Roberto",
+        "duration": 22,
+        "episode": "WWDC2026, una rovina?!?!?!?",
+        "imagepath": "temp/caffedesign.png",
+        "season": "09",
+        "title": "Caffe Design",
+        "type": "podcast",
+        "year": 2022
+    },
+    {
+        "album": "This is what _ feel like",
+        "author": "JVAE",
+        "duration": 0,
+        "imagepath": "temp/GoldenHour.jpeg",
+        "lyric": "It was just two lovers Sittin' in the car, listening to Blonde Fallin' for each other Pink and orange skies, feelin' super childish No Donald Glover Missed call from my mother Like, 'Where you at tonight?' Got no alibi",
+        "title": "Golden hour",
+        "type": "music",
+        "year": 2022
+    }
+]

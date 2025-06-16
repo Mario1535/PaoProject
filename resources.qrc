@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/assets/default_media_images">
+        <file>assets/default_media_images/audiobook_default.png</file>
+        <file>assets/default_media_images/music_default.png</file>
+        <file>assets/default_media_images/podcast_default.png</file>
+    </qresource>
+    <qresource prefix="/assets/window_icons">
+        <file>assets/window_icons/mainwindow_icon.png</file>
+        <file>assets/window_icons/mediadetailwidget_icon.png</file>
+        <file>assets/window_icons/mediaeditor_icon.png</file>
+        <file>assets/window_icons/mediatypedialog_icon.png</file>
+    </qresource>
+</RCC>

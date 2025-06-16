@@ -14,17 +14,11 @@
    <string>Media library</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QScrollArea" name="scrollArea">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
@@ -33,12 +27,12 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>776</width>
-           <height>489</height>
+           <width>784</width>
+           <height>500</height>
           </rect>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -46,47 +40,22 @@
          <widget class="QWidget" name="gridContainer" native="true">
           <property name="geometry">
            <rect>
-            <x>9</x>
-            <y>9</y>
-            <width>781</width>
-            <height>471</height>
+            <x>-10</x>
+            <y>-11</y>
+            <width>801</width>
+            <height>521</height>
            </rect>
           </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <widget class="QWidget" name="gridLayoutWidget">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>10</y>
-             <width>761</width>
-             <height>451</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout"/>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <layout class="QGridLayout" name="gridLayout"/>
+           </item>
+          </layout>
          </widget>
         </widget>
        </widget>
       </item>
-      <item alignment="Qt::AlignmentFlag::AlignHCenter">
-       <widget class="QLabel" name="label">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>title</string>
-        </property>
-       </widget>
-      </item>
-      <item alignment="Qt::AlignmentFlag::AlignHCenter">
+      <item>
        <widget class="QLineEdit" name="lineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -117,6 +86,27 @@
         </property>
         <property name="text">
          <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Sans Serif Collection</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>Mariofy</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>

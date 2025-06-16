@@ -39,9 +39,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QLineEdit" name="durationLine"/>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="photoLabel">
      <property name="text">
@@ -90,9 +87,6 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QLineEdit" name="yearLine"/>
-   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="authorLabel">
      <property name="text">
@@ -109,7 +103,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="audiobook">
       <layout class="QGridLayout" name="gridLayout_4">
@@ -132,16 +126,11 @@
        </item>
        <item row="1" column="1">
         <widget class="QWidget" name="widget" native="true">
-         <widget class="QTextEdit" name="summaryText">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>311</width>
-            <height>261</height>
-           </rect>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QTextEdit" name="summaryText"/>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -167,16 +156,11 @@
        </item>
        <item row="1" column="1">
         <widget class="QWidget" name="widget_2" native="true">
-         <widget class="QTextEdit" name="lyricsText">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>331</width>
-            <height>271</height>
-           </rect>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QTextEdit" name="lyricsText"/>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -218,6 +202,20 @@
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QSpinBox" name="yearLine">
+     <property name="maximum">
+      <number>9999</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QDoubleSpinBox" name="durationLine">
+     <property name="maximum">
+      <double>999.990000000000009</double>
+     </property>
     </widget>
    </item>
   </layout>

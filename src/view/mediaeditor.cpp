@@ -59,6 +59,7 @@ void mediaEditor::setIndex() {
 
 void mediaEditor::onSaveButtonClicked() {
 
+
     bool ok;
     AbstractMedia* media = nullptr;
     QString title = ui->titleLine->text();
@@ -77,7 +78,7 @@ void mediaEditor::onSaveButtonClicked() {
         if (!photoPath.isEmpty()) {
             imagePathToSave = photoPath;
         } else {
-            imagePathToSave = "../../assets/default_media_images/audiobook_default.png";
+            imagePathToSave = ":resources/assets/default_media_images/audiobook_default.png";
         }
         std::string imagePath = imagePathToSave.toStdString();
 
@@ -102,7 +103,7 @@ void mediaEditor::onSaveButtonClicked() {
         if (!photoPath.isEmpty()) {
             imagePathToSave = photoPath;
         } else {
-            imagePathToSave = "../../assets/default_media_images/music_default.png";
+            imagePathToSave = ":resources/assets/default_media_images/music_default.png";
         }
         std::string imagePath = imagePathToSave.toStdString();
 
@@ -127,7 +128,7 @@ void mediaEditor::onSaveButtonClicked() {
         if (!photoPath.isEmpty()) {
             imagePathToSave = photoPath;
         } else {
-            imagePathToSave = "../../assets/default_media_images/podcast_default.png";
+            imagePathToSave = ":resources/assets/default_media_images/podcast_default.png";
         }
         std::string imagePath = imagePathToSave.toStdString();
 
@@ -165,8 +166,8 @@ void mediaEditor::loadMedia(ConcreteVisitor* visitor) {
     ui->photoLabel->setPixmap(QPixmap(QString::fromStdString(attributes.imagePath)).scaled(200, 200, Qt::KeepAspectRatio));
     ui->titleLine->setText(QString::fromStdString(attributes.title));
     ui->authorLine->setText(QString::fromStdString(attributes.author));
-    ui->yearLine->setText(QString::number(attributes.year));
-    ui->durationLine->setText(QString::number(attributes.duration));
+    ui->yearLine->setValue(attributes.year);
+    ui->durationLine->setValue(attributes.duration);
 
     if (attributes.details.find("reader") != attributes.details.end()) {
         ui->stackedWidget->setCurrentIndex(0);

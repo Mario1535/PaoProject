@@ -30,23 +30,23 @@ HEADERS += \
     src/visitor/concretevisitor.h \
     src/visitor/jsonvisitor.h \
     src/visitor/visitor.h \
-    src\media\abstractmedia.h \
-    src\media\audiobook.h \
-    src\container\container.h \
-    src\view\mainwindow.h \
-    src\view\mediadetailwidget.h \
-    src\view\mediaeditor.h \
-    src\view\mediawidget.h \
-    src\media\music.h \
-    src\view\newmediatypedialog.h \
-    src\media\podcast.h \
+    src/media/abstractmedia.h \
+    src/media/audiobook.h \
+    src/container/container.h \
+    src/view/mainwindow.h \
+    src/view/mediadetailwidget.h \
+    src/view/mediaeditor.h \
+    src/view/mediawidget.h \
+    src/media/music.h \
+    src/view/newmediatypedialog.h \
+    src/media/podcast.h \
 
 FORMS += \
-    src\view\mainwindow.ui \
-    src\view\mediadetailwidget.ui \
-    src\view\mediaeditor.ui \
-    src\view\mediawidget.ui \
-    src\view\newmediatypedialog.ui \
+    src/view/mainwindow.ui \
+    src/view/mediadetailwidget.ui \
+    src/view/mediaeditor.ui \
+    src/view/mediawidget.ui \
+    src/view/newmediatypedialog.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -55,3 +55,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     TODO
+
+RESOURCES += \
+    resources.qrc \
+    src/view/resources.qrc

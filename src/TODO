@@ -1,7 +1,13 @@
 //////////TODO
 
->aggiustare griglia e scrollarea in mainwindow
+>aggiustare load
 
->aggiustare close per mediaDetailWidget
+>close nel create
 
->! gestire il salvataggio in JSON e il caricamento nel container
+>immagini di default
+
+>test virtual machine
+
+>test runtime
+
+>sistemare gridlayout
