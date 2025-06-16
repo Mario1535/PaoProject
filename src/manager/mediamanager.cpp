@@ -34,3 +34,12 @@ bool mediaManager::mediaDeleted(Container* container, const std::string title){
     }
     return false;
 }
+bool mediaManager::findMedia(Container* container, std::string title, Visitor* visitor){
+    for (auto it = container->begin(); it != container->end(); ++it) {
+        if ((*it)->getTitle() == title) {
+            (*it)->accept(visitor);
+            return true;
+        }
+    }
+    return false;
+}

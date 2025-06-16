@@ -27,6 +27,8 @@ mediaEditor::mediaEditor(QWidget *parent)
     connect(ui->saveButton, &QPushButton::clicked, this, &mediaEditor::onSaveButtonClicked);
     connect(ui->closeButton, &QPushButton::clicked, this, &mediaEditor::onCancelButtonClicked);
     connect(ui->photoButton, &QPushButton::clicked, this, &mediaEditor::onChangePhotoButtonClicked);
+    connect(ui->closeButton, &QPushButton::clicked, this, &mediaEditor::reject);
+
 
 }
 
@@ -63,6 +65,10 @@ void mediaEditor::onSaveButtonClicked() {
     bool ok;
     AbstractMedia* media = nullptr;
     QString title = ui->titleLine->text();
+    if (title.isEmpty()) {
+        QMessageBox::warning(this, "Errore", "Il titolo non può essere vuoto. Inserisci un titolo prima di salvare.");
+        return;
+    }
     QString author = ui->authorLine->text();
     double duration = ui->durationLine->text().toDouble(&ok);
     unsigned int year = ui->yearLine->text().toUInt(&ok);

@@ -2,7 +2,7 @@
 #define MUSIC_H
 
 #include <string>
-#include "abstractMedia.h"
+#include "abstractmedia.h"
 #include "../visitor/visitor.h"
 
 class Music : public AbstractMedia {

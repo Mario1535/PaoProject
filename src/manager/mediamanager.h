@@ -13,6 +13,7 @@ public:
     bool mediaCreated(const AbstractMedia*, Container*);
     bool mediaEdited(Container*, std::string, Visitor*);
     bool mediaDeleted(Container*, const std::string);
+    bool findMedia(Container*, std::string, Visitor*);
 };
 
 #endif // MEDIAMANAGER_H

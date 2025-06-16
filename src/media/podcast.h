@@ -2,7 +2,7 @@
 #define PODCAST_H
 
 #include <string>
-#include "abstractMedia.h"
+#include "abstractmedia.h"
 #include "../visitor/visitor.h"
 
 class Podcast : public AbstractMedia {

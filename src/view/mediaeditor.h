@@ -18,20 +18,20 @@ public:
     explicit mediaEditor(QWidget *parent = nullptr);
     ~mediaEditor();
 
-    void loadMedia(ConcreteVisitor*);  // Carica i dati di un media esistente
+    void loadMedia(ConcreteVisitor*);
     short int choice();
     void setIndex();
 
 private slots:
-    void onSaveButtonClicked();  // Slot per salvare le modifiche
-    void onCancelButtonClicked();  // Slot per annullare
-    void onChangePhotoButtonClicked();  // Slot per cambiare la foto
+    void onSaveButtonClicked();
+    void onCancelButtonClicked();
+    void onChangePhotoButtonClicked();
 
 private:
     Ui::mediaEditor *ui;
-    AbstractMedia *currentMedia;  // Puntatore al media corrente
+    AbstractMedia *currentMedia;
     newMediaTypeDialog *dialog;
-    QString photoPath;  // Percorso della foto
+    QString photoPath;
 signals:
     void newMediaCreated(AbstractMedia*);
     void abortMediaCreation();

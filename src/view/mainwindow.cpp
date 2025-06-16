@@ -56,8 +56,12 @@ void MainWindow::setupUI()
     QMenu* mediaMenu = menubar->addMenu("Media");
 
     QAction* actionNew = new QAction("New", this);
+    actionNew->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
     QAction* actionLoad = new QAction("Load", this);
+    actionLoad->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
     QAction* actionExport = new QAction("Export", this);
+    actionExport->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_E));
+
     mediaMenu->addAction(actionNew);
     mediaMenu->addAction(actionLoad);
     mediaMenu->addAction(actionExport);
@@ -75,8 +79,8 @@ void MainWindow::setupUI()
     ui->scrollArea->setWidgetResizable(true);
 
     QVBoxLayout* layout = new QVBoxLayout(ui->gridContainer);
-    layout->addLayout(ui->gridLayout);  // oppure .addWidget(gridLayoutWidget), se usi un wrapper
-    layout->addStretch(); // per evitare schiacciamento
+    layout->addLayout(ui->gridLayout);
+    layout->addStretch();
 
     ui->scrollArea->setWidget(ui->scrollAreaWidgetContents);
 
@@ -165,36 +169,34 @@ void MainWindow::editMedia(Container* container, std::string title){
     mediaManager *manager = new mediaManager();
     mediaWidget *mediawidget;
 
-    if (manager->mediaEdited(container, title, visitor)) {
+    if (manager->findMedia(container, title, visitor)) {
         qDebug() << "editing media";
         editor->loadMedia(visitor);
         editor->show();
-        connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &visitor, &container](AbstractMedia* newMedia) {
 
-            newMedia->accept(visitor);
+        connect(editor, &mediaEditor::newMediaCreated, this, [this, &mediawidget, &visitor, &container, &manager, &title](AbstractMedia* newMedia) {
+            if (manager->mediaEdited(container, title, visitor)) {
+                newMedia->accept(visitor);
 
-            mediaManager *manager = new mediaManager();
-            if(manager->mediaCreated(newMedia, container)){
-                statusBar()->showMessage("Media salvato!", 3000);
-                mediawidget = new mediaWidget(visitor, this);
+                mediaManager *manager = new mediaManager();
+                if(manager->mediaCreated(newMedia, container)){
+                    statusBar()->showMessage("Media modificato!", 3000);
+                    mediawidget = new mediaWidget(visitor, this);
+
+                }
+                else {
+                    statusBar()->showMessage("Media NON modificato!", 3000);
+                }
+                delete manager;
+            } else {
+                statusBar()->showMessage("Media NON modificato!", 3000);
             }
-            else {
-                statusBar()->showMessage("Media NON salvato", 3000);
-            }
-            delete manager;
         });
+
         editor->exec();
-        for (auto it = container->begin(); it != container->end(); ++it) {
-            qDebug() << "media: " << (*it)->getTitle();
-        }
-        statusBar()->showMessage("Media modificato!", 3000);
-
-
         refreshGridLayout();
-    } else {
-        statusBar()->showMessage("Media NON modificato!", 3000);
-    }
 
+    }
     delete editor;
     delete visitor;
     delete manager;
@@ -246,7 +248,7 @@ void MainWindow::onLoadActionTriggered() {
         const AbstractMedia* media = load(obj);
 
         if (manager->mediaCreated(media, container)) {
-            qDebug() << "il media: " << media->getTitle();
+            qDebug() << "il media: ";
             statusBar()->showMessage("Media aggiunto!", 3000);
         } else {
             statusBar()->showMessage("Media NON aggiunto", 3000);
@@ -341,16 +343,14 @@ void MainWindow::clearGridLayout() {
 
 void MainWindow::loadMedia() {
     qDebug() << "loading media";
-    const AbstractMedia* media;
-    ConcreteVisitor* visitor = new ConcreteVisitor();
+
     for (auto it = container->begin(); it != container->end();) {
+         ConcreteVisitor* visitor = new ConcreteVisitor();
         (*it)->accept(visitor);
         mediaWidget* widget = new mediaWidget(visitor, this);
 
         widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-        media = *it;
-        qDebug() << "carico media: " << media->getTitle();
+        qDebug() << "carico media: ";
         addWidgetInGrid(widget, visitor);
 
         it++;
