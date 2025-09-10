@@ -6,7 +6,7 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../../mediaeditor.h"
+#include "../../../src/view/mediaeditor.h"
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -38,8 +38,11 @@ struct qt_meta_tag_ZN11mediaEditorE_t {};
 #ifdef QT_MOC_HAS_STRINGDATA
 static constexpr auto qt_meta_stringdata_ZN11mediaEditorE = QtMocHelpers::stringData(
     "mediaEditor",
-    "onSaveButtonClicked",
+    "newMediaCreated",
     "",
+    "AbstractMedia*",
+    "abortMediaCreation",
+    "onSaveButtonClicked",
     "onCancelButtonClicked",
     "onChangePhotoButtonClicked"
 );
@@ -53,17 +56,25 @@ Q_CONSTINIT static const uint qt_meta_data_ZN11mediaEditorE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       2,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    1,   44,    2, 0x06,    1 /* Public */,
+       4,    0,   47,    2, 0x06,    3 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   32,    2, 0x08,    1 /* Private */,
-       3,    0,   33,    2, 0x08,    2 /* Private */,
-       4,    0,   34,    2, 0x08,    3 /* Private */,
+       5,    0,   48,    2, 0x08,    4 /* Private */,
+       6,    0,   49,    2, 0x08,    5 /* Private */,
+       7,    0,   50,    2, 0x08,    6 /* Private */,
+
+ // signals: parameters
+    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
@@ -82,6 +93,11 @@ Q_CONSTINIT const QMetaObject mediaEditor::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_tag_ZN11mediaEditorE_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<mediaEditor, std::true_type>,
+        // method 'newMediaCreated'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<AbstractMedia *, std::false_type>,
+        // method 'abortMediaCreation'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onSaveButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onCancelButtonClicked'
@@ -97,13 +113,31 @@ void mediaEditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     auto *_t = static_cast<mediaEditor *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->onSaveButtonClicked(); break;
-        case 1: _t->onCancelButtonClicked(); break;
-        case 2: _t->onChangePhotoButtonClicked(); break;
+        case 0: _t->newMediaCreated((*reinterpret_cast< std::add_pointer_t<AbstractMedia*>>(_a[1]))); break;
+        case 1: _t->abortMediaCreation(); break;
+        case 2: _t->onSaveButtonClicked(); break;
+        case 3: _t->onCancelButtonClicked(); break;
+        case 4: _t->onChangePhotoButtonClicked(); break;
         default: ;
         }
     }
-    (void)_a;
+    if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _q_method_type = void (mediaEditor::*)(AbstractMedia * );
+            if (_q_method_type _q_method = &mediaEditor::newMediaCreated; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+                *result = 0;
+                return;
+            }
+        }
+        {
+            using _q_method_type = void (mediaEditor::*)();
+            if (_q_method_type _q_method = &mediaEditor::abortMediaCreation; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+                *result = 1;
+                return;
+            }
+        }
+    }
 }
 
 const QMetaObject *mediaEditor::metaObject() const
@@ -125,15 +159,28 @@ int mediaEditor::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 5;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 5;
     }
     return _id;
+}
+
+// SIGNAL 0
+void mediaEditor::newMediaCreated(AbstractMedia * _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void mediaEditor::abortMediaCreation()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 QT_WARNING_POP
